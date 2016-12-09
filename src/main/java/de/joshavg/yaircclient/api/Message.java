@@ -1,0 +1,20 @@
+package de.joshavg.yaircclient.api;
+
+public class Message {
+
+    private Message() {
+    }
+
+    public static String nick(String n) {
+        return "NICK " + n;
+    }
+
+    public static String join(String c) {
+        return "JOIN " + c;
+    }
+
+    public static String user(String u) {
+        return String.format("USER %s 0 * :%s", u, u);
+    }
+
+}
