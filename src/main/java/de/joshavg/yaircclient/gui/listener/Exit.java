@@ -19,7 +19,7 @@ public class Exit implements GuiListener {
     public void messageTyped(String message, MainForm gui) {
         if (message.equals("/e")) {
             if (!confirmWarned) {
-                OutputFactory.getSystem().writeln("type again to confirm", ActionType.ERROR);
+                gui.getCurrentTarget().writeln("type again to confirm", ActionType.ERROR);
                 confirmWarned = true;
             } else {
                 quit(gui);

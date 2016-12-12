@@ -16,15 +16,17 @@ public class MainForm extends JFrame implements ApiListener {
 
     private final JTextField mainInput;
 
-    private final OutputTarget systemOutput;
-
     private final List<GuiListener> listeners;
+
+    private JScrollPane sspMainOutput;
+
+    private OutputTarget currentTarget;
 
     public MainForm() {
         mainInput = new JTextField();
         indicator = new JLabel("brabbel");
-        systemOutput = OutputFactory.createSystem("system");
         listeners = new ArrayList<>();
+        currentTarget = OutputFactory.createSystem();
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setTitle("brabbel");
@@ -57,7 +59,7 @@ public class MainForm extends JFrame implements ApiListener {
         }
 
         Container contentPane = getContentPane();
-        JScrollPane sspMainOutput = new JScrollPane(systemOutput);
+        sspMainOutput = new JScrollPane(currentTarget);
 
         JPanel inputPanel = new JPanel(new BorderLayout());
         inputPanel.add(indicator, BorderLayout.WEST);
@@ -70,6 +72,15 @@ public class MainForm extends JFrame implements ApiListener {
         JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, inputPanel, sspMainOutput);
 
         contentPane.add(splitPane);
+    }
+
+    public void setActiveTarget(OutputTarget target) {
+        this.currentTarget = target;
+        sspMainOutput.setViewportView(target);
+    }
+
+    public OutputTarget getCurrentTarget() {
+        return currentTarget;
     }
 
 }

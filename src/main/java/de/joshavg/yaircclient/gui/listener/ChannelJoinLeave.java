@@ -4,6 +4,7 @@ import de.joshavg.yaircclient.api.Client;
 import de.joshavg.yaircclient.api.Message;
 import de.joshavg.yaircclient.gui.GuiListener;
 import de.joshavg.yaircclient.gui.MainForm;
+import de.joshavg.yaircclient.gui.OutputFactory;
 
 public class ChannelJoinLeave implements GuiListener {
     private Client client;
@@ -14,11 +15,13 @@ public class ChannelJoinLeave implements GuiListener {
 
     @Override
     public void messageTyped(String message, MainForm gui) {
-        if (!message.startsWith("/j")) {
-            return;
+        if (message.startsWith("/j")) {
+            String channel = message.split("\\s")[1];
+            client.write(Message.join(channel));
+        } else if (message.startsWith("/d")) {
+            String channel = message.split("\\s")[1];
+            client.write(Message.part(channel));
+            OutputFactory.getOrCreate(channel).writeln("parted");
         }
-
-        String channel = message.split("\\s")[1];
-        client.write(Message.join(channel));
     }
 }

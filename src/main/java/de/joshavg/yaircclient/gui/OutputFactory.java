@@ -1,5 +1,6 @@
 package de.joshavg.yaircclient.gui;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,7 +26,11 @@ public class OutputFactory {
         return TARGETS.get("system");
     }
 
-    static OutputTarget createSystem(String system) {
+    static OutputTarget createSystem() {
         return getOrCreate("system");
+    }
+
+    public static Map<String, OutputTarget> getAll() {
+        return Collections.unmodifiableMap(TARGETS);
     }
 }

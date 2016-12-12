@@ -13,6 +13,10 @@ public class Message {
         return "JOIN " + c;
     }
 
+    public static String part(String c) {
+        return "PART " + c;
+    }
+
     public static String user(String u) {
         return String.format("USER %s 0 * :%s", u, u);
     }
