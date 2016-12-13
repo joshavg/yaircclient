@@ -26,7 +26,6 @@ public class Client implements ApiListener {
 
     Client() {
         this.listeners = new HashSet<>();
-        listeners.add(this);
     }
 
     public void addListener(ApiListener l) {

@@ -11,6 +11,7 @@ public class Listeners {
         client.addListener(new Renamer());
         client.addListener(new Channels());
         client.addListener(new Disconnector());
+        client.addListener(client);
     }
 
 }
