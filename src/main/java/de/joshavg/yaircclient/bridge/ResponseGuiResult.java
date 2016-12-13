@@ -19,12 +19,12 @@ public class ResponseGuiResult implements ApiListener {
 
     @Override
     public void parsed(Map<ResponseParser.Key, ResponseParser.ResponseValue> parsed, Client client) {
-        if (!parsed.get(ResponseParser.Key.CMD).get().equals("JOIN")) {
-            return;
-        }
+        String command = parsed.get(ResponseParser.Key.CMD).get();
 
-        String channel = parsed.get(ResponseParser.Key.TARGET).get();
-        OutputTarget target = OutputFactory.getOrCreate(channel);
-        form.setActiveTarget(target);
+        if (command.equals("JOIN")) {
+            String channel = parsed.get(ResponseParser.Key.CHANNEL).get();
+            OutputTarget target = OutputFactory.getOrCreate(channel);
+            form.setActiveTarget(target);
+        }
     }
 }

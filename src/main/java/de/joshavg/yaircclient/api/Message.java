@@ -21,4 +21,8 @@ public class Message {
         return String.format("USER %s 0 * :%s", u, u);
     }
 
+    public static String privmsg(String target, String payload) {
+        return String.format("PRIVMSG %s %s", target, payload);
+    }
+
 }

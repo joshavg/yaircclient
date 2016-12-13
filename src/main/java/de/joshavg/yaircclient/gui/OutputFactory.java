@@ -16,7 +16,7 @@ public class OutputFactory {
             return TARGETS.get(name);
         }
 
-        OutputTarget pane = new OutputTarget();
+        OutputTarget pane = new OutputTarget(name);
         TARGETS.put(name, pane);
 
         return pane;

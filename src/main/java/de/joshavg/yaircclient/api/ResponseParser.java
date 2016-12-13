@@ -1,5 +1,9 @@
 package de.joshavg.yaircclient.api;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -8,7 +12,8 @@ import java.util.regex.Pattern;
 public class ResponseParser {
 
     public enum Key {
-        PAYLOAD, NICK, USER, SERVER, CMD, TARGET, META
+        PAYLOAD, NICK, USER, SERVER, CMD, TARGET, META,
+        CHANNEL, FROM, SENDER
     }
 
     public static class ResponseValue {
@@ -38,6 +43,8 @@ public class ResponseParser {
 
     private static final Pattern USER_IDENT = Pattern.compile("^([^!]+)!([^@]+)@(.+)$");
 
+    private static final Logger LOG = LoggerFactory.getLogger(ResponseParser.class);
+
     private final String line;
 
     ResponseParser(String line) {
@@ -45,6 +52,8 @@ public class ResponseParser {
     }
 
     Map<Key, ResponseValue> parse() {
+        LOG.trace("parsing " + line);
+
         Map<Key, ResponseValue> map = new HashMap<>();
         prepareMap(map);
 
@@ -55,9 +64,11 @@ public class ResponseParser {
 
         String[] split = (" " + workLine).split(" :");
         if (split.length < 1) {
+            LOG.warn("nothing found, returning empty result");
             return map;
         }
 
+        LOG.trace("split parts: " + Arrays.toString(split));
         if (split.length > 2) {
             String payload = workLine.substring(3 + split[1].length());
             map.put(Key.PAYLOAD, ResponseValue.of(payload));
@@ -67,6 +78,8 @@ public class ResponseParser {
         String[] headerSplit = header.split(" ");
         boolean isSingleHeader = false;
 
+        LOG.trace("header: " + header);
+        LOG.trace("header split: " + Arrays.toString(headerSplit));
         Matcher userIdentMatcher = USER_IDENT.matcher(headerSplit[0]);
         if (userIdentMatcher.matches()) {
             map.put(Key.NICK, ResponseValue.of(userIdentMatcher.group(1)));
@@ -81,9 +94,12 @@ public class ResponseParser {
             }
         }
 
+        LOG.trace("is single header: " + isSingleHeader);
         if (!isSingleHeader) {
             map.put(Key.CMD, ResponseValue.of(headerSplit[1]));
-            map.put(Key.TARGET, ResponseValue.of(headerSplit[2]));
+            if (headerSplit.length > 2) {
+                map.put(Key.TARGET, ResponseValue.of(headerSplit[2]));
+            }
         }
 
         if (headerSplit.length > 3) {
@@ -92,7 +108,26 @@ public class ResponseParser {
             map.put(Key.META, ResponseValue.of(meta));
         }
 
+        postProcess(map);
+
         return map;
+    }
+
+    private void postProcess(Map<Key, ResponseValue> map) {
+        switch (map.get(Key.CMD).get()) {
+            case "JOIN":
+                map.put(Key.CHANNEL, map.get(Key.TARGET));
+                break;
+            case "PRIVMSG":
+                String target = map.get(Key.TARGET).get();
+                if (target.startsWith("#")) {
+                    map.put(Key.CHANNEL, map.get(Key.TARGET));
+                } else {
+                    map.put(Key.FROM, map.get(Key.TARGET));
+                }
+                map.put(Key.SENDER, map.get(Key.NICK));
+                break;
+        }
     }
 
     private void prepareMap(Map<Key, ResponseValue> map) {

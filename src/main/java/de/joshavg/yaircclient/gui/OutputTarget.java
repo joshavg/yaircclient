@@ -11,7 +11,10 @@ import static de.joshavg.yaircclient.gui.ActionType.*;
 
 public class OutputTarget extends JTextPane {
 
-    OutputTarget() {
+    private final String target;
+
+    OutputTarget(String target) {
+        this.target = target;
         createStyles();
 
         setEditable(false);
@@ -62,5 +65,9 @@ public class OutputTarget extends JTextPane {
         pos = length - lastLine.length();
 
         setCaretPosition(pos);
+    }
+
+    public String getTarget() {
+        return target;
     }
 }
