@@ -7,6 +7,43 @@
     <groupId>de.joshavg</groupId>
     <artifactId>yaircclient</artifactId>
     <version>0.1</version>
+
+    <url>https://github.com/joshavg/yaircclient</url>
+    <name>Yet Another IRC Client</name>
+
+    <distributionManagement>
+        <repository>
+            <id>GitHub</id>
+            <url>https://github.com/joshavg/yaircclient</url>
+        </repository>
+    </distributionManagement>
+
+    <developers>
+        <developer>
+            <id>joshavg</id>
+            <name>Josha von Gizycki</name>
+            <email>mail@joshavg.de</email>
+            <url>https://joshavg.de</url>
+            <roles>
+                <role>head</role>
+                <role>developer</role>
+            </roles>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>GPL-3.0</name>
+            <distribution>repo</distribution>
+            <url>https://raw.githubusercontent.com/joshavg/yaircclient/master/LICENSE</url>
+        </license>
+    </licenses>
+
+    <issueManagement>
+        <url>https://github.com/joshavg/yaircclient/issues</url>
+        <system>GitHub</system>
+    </issueManagement>
+
     <build>
         <plugins>
             <plugin>
