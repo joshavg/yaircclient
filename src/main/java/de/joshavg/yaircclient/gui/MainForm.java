@@ -72,6 +72,7 @@ public class MainForm extends JFrame implements ApiListener {
 
         try {
             trayIcon = new TrayIcon(ImageIO.read(iconResource), "brabbel");
+            trayIcon.setImageAutoSize(true);
             SystemTray.getSystemTray().add(trayIcon);
         } catch (IOException e) {
             LOG.warn("error loading tray icon image", e);

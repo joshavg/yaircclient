@@ -4,12 +4,19 @@ import de.joshavg.yaircclient.api.Client;
 import de.joshavg.yaircclient.api.ResponseParser;
 import de.joshavg.yaircclient.api.listener.ApiListener;
 import de.joshavg.yaircclient.gui.ActionType;
+import de.joshavg.yaircclient.gui.MainForm;
 import de.joshavg.yaircclient.gui.OutputFactory;
 import de.joshavg.yaircclient.gui.OutputTarget;
 
 import java.util.Map;
 
 public class ApiLogger implements ApiListener {
+    private final MainForm form;
+
+    public ApiLogger(MainForm form) {
+        this.form = form;
+    }
+
     @Override
     public void parsed(Map<ResponseParser.Key, ResponseParser.ResponseValue> parsed, Client client) {
         OutputTarget target = OutputFactory.getSystem();
@@ -18,5 +25,18 @@ public class ApiLogger implements ApiListener {
                 parsed.get(ResponseParser.Key.CMD),
                 parsed.get(ResponseParser.Key.PAYLOAD));
         target.writeln(message, ActionType.NOTICE);
+
+        if (parsed.get(ResponseParser.Key.CMD).get().equals("NICK")) {
+            nickChange(parsed);
+        }
+    }
+
+    private void nickChange(Map<ResponseParser.Key, ResponseParser.ResponseValue> parsed) {
+        String user = parsed.get(ResponseParser.Key.USER).get();
+        String newNick = parsed.get(ResponseParser.Key.PAYLOAD).get();
+
+        OutputTarget currentTarget = form.getCurrentTarget();
+        String message = String.format("%s changed nick to %s", user, newNick);
+        currentTarget.writeln(message, ActionType.NOTICE);
     }
 }

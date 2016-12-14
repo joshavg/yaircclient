@@ -28,7 +28,7 @@ class GuiController {
         form.addListener(new ChannelJoinLeave(client));
         form.addListener(new MessageSend(client, messageDisplay));
 
-        client.addListener(new ApiLogger());
+        client.addListener(new ApiLogger(form));
         client.addListener(messageDisplay);
 
         form.setVisible(true);
