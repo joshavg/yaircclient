@@ -82,7 +82,7 @@ public class Client implements ApiListener {
         }
 
         try {
-            writer.write(line + "\r\n");
+            writer.write(line + "\n");
             writer.flush();
         } catch (IOException e) {
             LOG.error("error writing to socket", e);

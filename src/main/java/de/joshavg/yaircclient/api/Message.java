@@ -22,7 +22,7 @@ public class Message {
     }
 
     public static String privmsg(String target, String payload) {
-        return String.format("PRIVMSG %s %s", target, payload);
+        return String.format("PRIVMSG %s :%s", target, payload);
     }
 
 }

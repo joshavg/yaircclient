@@ -4,6 +4,7 @@ import com.eclipsesource.json.JsonObject;
 import de.joshavg.yaircclient.api.Client;
 import de.joshavg.yaircclient.api.ClientFactory;
 import de.joshavg.yaircclient.bridge.ApiLogger;
+import de.joshavg.yaircclient.bridge.JoinDisplay;
 import de.joshavg.yaircclient.bridge.MessageDisplay;
 import de.joshavg.yaircclient.gui.MainForm;
 import de.joshavg.yaircclient.gui.listener.*;
@@ -30,6 +31,7 @@ class GuiController {
 
         client.addListener(new ApiLogger(form));
         client.addListener(messageDisplay);
+        client.addListener(new JoinDisplay());
 
         form.setVisible(true);
 
