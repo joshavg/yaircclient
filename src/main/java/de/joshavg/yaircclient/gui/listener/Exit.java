@@ -16,17 +16,21 @@ public class Exit implements GuiListener {
 
     @Override
     public void messageTyped(String message, MainForm gui) {
-        if (message.equals("/e")) {
-            if (!confirmWarned) {
-                gui.getCurrentTarget().writeln("type again to confirm", ActionType.ERROR);
-                confirmWarned = true;
-            } else {
+        switch (message) {
+            case "/e":
+                if (!confirmWarned) {
+                    gui.getCurrentTarget().writeln("type again to confirm", ActionType.ERROR);
+                    confirmWarned = true;
+                } else {
+                    quit(gui);
+                }
+                break;
+            case "/e!":
                 quit(gui);
-            }
-        } else if (message.equals("/e!")) {
-            quit(gui);
-        } else {
-            confirmWarned = false;
+                break;
+            default:
+                confirmWarned = false;
+                break;
         }
     }
 

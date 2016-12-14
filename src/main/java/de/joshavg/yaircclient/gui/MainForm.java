@@ -111,6 +111,7 @@ public class MainForm extends JFrame implements ApiListener {
     public void setActiveTarget(OutputTarget target) {
         this.currentTarget = target;
         sspMainOutput.setViewportView(target);
+        indicator.setText(target.getTarget());
     }
 
     public OutputTarget getCurrentTarget() {

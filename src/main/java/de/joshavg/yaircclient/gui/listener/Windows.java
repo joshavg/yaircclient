@@ -1,9 +1,6 @@
 package de.joshavg.yaircclient.gui.listener;
 
-import de.joshavg.yaircclient.gui.GuiListener;
-import de.joshavg.yaircclient.gui.MainForm;
-import de.joshavg.yaircclient.gui.OutputFactory;
-import de.joshavg.yaircclient.gui.OutputTarget;
+import de.joshavg.yaircclient.gui.*;
 
 public class Windows implements GuiListener {
 
@@ -15,18 +12,30 @@ public class Windows implements GuiListener {
 
     @Override
     public void messageTyped(String message, MainForm gui) {
-        if (!message.startsWith("/w")) {
+        String[] split = message.split("\\s");
+
+        if (!split[0].equals("/w")) {
             return;
         }
 
-        String[] action = message.split("\\s");
-
-        if (action.length == 1 || action[1].equals("l")) {
-            OutputTarget currentTarget = form.getCurrentTarget();
-            OutputFactory.getAll().keySet().forEach(currentTarget::writeln);
-        } else if (action[1].equals("v") && action.length == 3) {
-            OutputTarget target = OutputFactory.getOrCreate(action[2]);
-            form.setActiveTarget(target);
+        if (split.length == 1 || split[1].equals("l")) {
+            listWindows();
+        } else if (split[1].equals("v") && split.length == 3) {
+            setActiveWindow(split[2]);
         }
+    }
+
+    private void setActiveWindow(String name) {
+        OutputTarget target = OutputFactory.get(name);
+        if (target != null) {
+            form.setActiveTarget(target);
+        } else {
+            form.getCurrentTarget().writeln("unknown window: \"" + name + "\"", ActionType.NOTICE);
+        }
+    }
+
+    private void listWindows() {
+        OutputTarget currentTarget = form.getCurrentTarget();
+        OutputFactory.getAll().keySet().forEach(currentTarget::writeln);
     }
 }

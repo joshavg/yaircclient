@@ -22,6 +22,10 @@ public class OutputFactory {
         return pane;
     }
 
+    public static OutputTarget get(String name) {
+        return TARGETS.get(name);
+    }
+
     public static OutputTarget getSystem() {
         return TARGETS.get("system");
     }
