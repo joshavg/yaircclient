@@ -30,7 +30,7 @@ public class Windows implements GuiListener {
         if (target != null) {
             form.setActiveTarget(target);
         } else {
-            form.getCurrentTarget().writeln("unknown window: \"" + name + "\"", ActionType.NOTICE);
+            form.getCurrentTarget().writeln("unknown window: \"" + name + "\"", ActionType.ERROR);
         }
     }
 

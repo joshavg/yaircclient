@@ -37,19 +37,13 @@ public class MessageDisplay implements ApiListener {
             type = ActionType.HIGHLIGHT;
             form.showNotification("highlight in " + from, payload);
         }
-        displayMessage(from, sender, payload, type);
+        displayMessage(OutputFactory.getOrCreate(from), sender, payload, type);
     }
 
-    private void displayMessage(String from, String sender, String message, ActionType type) {
-        OutputTarget target = OutputFactory.getOrCreate(from);
-
+    public void displayMessage(OutputTarget target, String sender, String message, ActionType type) {
         String line = String.format("%s - %s: %s",
                 DATE_FORMAT.format(new Date()), sender, message);
 
         target.writeln(line, type);
-    }
-
-    public void displayMessage(String from, String sender, String message) {
-        displayMessage(from, sender, message, ActionType.MESSAGE);
     }
 }

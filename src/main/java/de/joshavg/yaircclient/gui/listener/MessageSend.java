@@ -5,6 +5,9 @@ import de.joshavg.yaircclient.api.Message;
 import de.joshavg.yaircclient.bridge.MessageDisplay;
 import de.joshavg.yaircclient.gui.GuiListener;
 import de.joshavg.yaircclient.gui.MainForm;
+import de.joshavg.yaircclient.gui.OutputFactory;
+
+import static de.joshavg.yaircclient.gui.ActionType.NOTICE;
 
 public class MessageSend implements GuiListener {
     private final Client client;
@@ -24,6 +27,6 @@ public class MessageSend implements GuiListener {
         String target = gui.getCurrentTarget().getTarget();
         client.write(Message.privmsg(target, message));
 
-        display.displayMessage(target, client.getNick(), message);
+        display.displayMessage(OutputFactory.getOrCreate(target), client.getNick(), message, NOTICE);
     }
 }
