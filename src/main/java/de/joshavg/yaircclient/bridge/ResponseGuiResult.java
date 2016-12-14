@@ -25,6 +25,13 @@ public class ResponseGuiResult implements ApiListener {
             String channel = parsed.get(ResponseParser.Key.CHANNEL).get();
             OutputTarget target = OutputFactory.getOrCreate(channel);
             form.setActiveTarget(target);
+        } else if (command.equals("PART")) {
+            form.setActiveTarget(OutputFactory.getSystem());
+
+            String channel = parsed.get(ResponseParser.Key.CHANNEL).get();
+
+            OutputFactory.remove(channel);
+            OutputFactory.getSystem().writeln("parted from " + channel);
         }
     }
 }

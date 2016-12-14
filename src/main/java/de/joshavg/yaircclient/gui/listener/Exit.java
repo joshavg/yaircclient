@@ -4,7 +4,6 @@ import de.joshavg.yaircclient.api.Client;
 import de.joshavg.yaircclient.gui.ActionType;
 import de.joshavg.yaircclient.gui.GuiListener;
 import de.joshavg.yaircclient.gui.MainForm;
-import de.joshavg.yaircclient.gui.OutputFactory;
 
 public class Exit implements GuiListener {
 

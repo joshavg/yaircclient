@@ -33,4 +33,8 @@ public class OutputFactory {
     public static Map<String, OutputTarget> getAll() {
         return Collections.unmodifiableMap(TARGETS);
     }
+
+    public static void remove(String name) {
+        TARGETS.remove(name);
+    }
 }

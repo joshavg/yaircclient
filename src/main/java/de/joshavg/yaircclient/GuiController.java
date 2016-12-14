@@ -20,7 +20,7 @@ class GuiController {
     }
 
     void start() {
-        MessageDisplay messageDisplay = new MessageDisplay();
+        MessageDisplay messageDisplay = new MessageDisplay(form);
 
         form.addListener(new Connect(client));
         form.addListener(new SettingsListener());

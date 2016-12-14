@@ -4,6 +4,7 @@ import de.joshavg.yaircclient.api.Client;
 import de.joshavg.yaircclient.api.ResponseParser;
 import de.joshavg.yaircclient.api.listener.ApiListener;
 import de.joshavg.yaircclient.gui.ActionType;
+import de.joshavg.yaircclient.gui.MainForm;
 import de.joshavg.yaircclient.gui.OutputFactory;
 import de.joshavg.yaircclient.gui.OutputTarget;
 
@@ -15,6 +16,12 @@ import java.util.Map;
 public class MessageDisplay implements ApiListener {
     private static final DateFormat DATE_FORMAT = DateFormat.getTimeInstance(DateFormat.DEFAULT, Locale.getDefault());
 
+    private final MainForm form;
+
+    public MessageDisplay(MainForm form) {
+        this.form = form;
+    }
+
     @Override
     public void parsed(Map<ResponseParser.Key, ResponseParser.ResponseValue> parsed, Client client) {
         if (!parsed.get(ResponseParser.Key.CMD).get().equals("PRIVMSG")) {
@@ -25,15 +32,24 @@ public class MessageDisplay implements ApiListener {
         String sender = parsed.get(ResponseParser.Key.SENDER).get();
         String payload = parsed.get(ResponseParser.Key.PAYLOAD).get();
 
-        displayMessage(from, sender, payload);
+        ActionType type = ActionType.MESSAGE;
+        if (payload.toLowerCase().contains(client.getNick().toLowerCase())) {
+            type = ActionType.HIGHLIGHT;
+            form.showNotification("highlight in " + from, payload);
+        }
+        displayMessage(from, sender, payload, type);
     }
 
-    public void displayMessage(String from, String sender, String message) {
+    private void displayMessage(String from, String sender, String message, ActionType type) {
         OutputTarget target = OutputFactory.getOrCreate(from);
 
         String line = String.format("%s - %s: %s",
                 DATE_FORMAT.format(new Date()), sender, message);
 
-        target.writeln(line, ActionType.MESSAGE);
+        target.writeln(line, type);
+    }
+
+    public void displayMessage(String from, String sender, String message) {
+        displayMessage(from, sender, message, ActionType.MESSAGE);
     }
 }

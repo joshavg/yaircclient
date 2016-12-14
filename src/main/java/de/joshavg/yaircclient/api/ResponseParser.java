@@ -11,40 +11,8 @@ import java.util.regex.Pattern;
 
 public class ResponseParser {
 
-    public enum Key {
-        PAYLOAD, NICK, USER, SERVER, CMD, TARGET, META,
-        CHANNEL, FROM, SENDER
-    }
-
-    public static class ResponseValue {
-        private final String value;
-
-        ResponseValue(String value) {
-            this.value = value;
-        }
-
-        public String get() {
-            return value;
-        }
-
-        public String[] getValues() {
-            return value.split(" ");
-        }
-
-        static ResponseValue of(String value) {
-            return new ResponseValue(value);
-        }
-
-        @Override
-        public String toString() {
-            return value;
-        }
-    }
-
     private static final Pattern USER_IDENT = Pattern.compile("^([^!]+)!([^@]+)@(.+)$");
-
     private static final Logger LOG = LoggerFactory.getLogger(ResponseParser.class);
-
     private final String line;
 
     ResponseParser(String line) {
@@ -127,12 +95,45 @@ public class ResponseParser {
                 }
                 map.put(Key.SENDER, map.get(Key.NICK));
                 break;
+            case "PART":
+                map.put(Key.CHANNEL, map.get(Key.TARGET));
+                break;
         }
     }
 
     private void prepareMap(Map<Key, ResponseValue> map) {
         for (Key k : Key.values()) {
             map.put(k, ResponseValue.of(""));
+        }
+    }
+
+    public enum Key {
+        PAYLOAD, NICK, USER, SERVER, CMD, TARGET, META,
+        CHANNEL, FROM, SENDER
+    }
+
+    public static class ResponseValue {
+        private final String value;
+
+        ResponseValue(String value) {
+            this.value = value;
+        }
+
+        static ResponseValue of(String value) {
+            return new ResponseValue(value);
+        }
+
+        public String get() {
+            return value;
+        }
+
+        public String[] getValues() {
+            return value.split(" ");
+        }
+
+        @Override
+        public String toString() {
+            return value;
         }
     }
 

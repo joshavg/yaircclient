@@ -34,7 +34,7 @@ public class Settings {
     }
 
     static boolean createIfNotExists() {
-        if(new File(PATH).exists()) {
+        if (new File(PATH).exists()) {
             return false;
         }
 
