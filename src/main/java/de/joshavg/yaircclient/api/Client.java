@@ -40,8 +40,8 @@ public class Client implements ApiListener {
                 socket = new Socket(host, port);
                 socket.setKeepAlive(true);
 
-                BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+                BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
+                writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"));
 
                 write(Message.user(nick));
                 write(Message.nick(nick));

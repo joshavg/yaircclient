@@ -5,7 +5,6 @@ import de.joshavg.yaircclient.api.Client;
 import de.joshavg.yaircclient.api.ClientFactory;
 import de.joshavg.yaircclient.bridge.ApiLogger;
 import de.joshavg.yaircclient.bridge.MessageDisplay;
-import de.joshavg.yaircclient.bridge.ResponseGuiResult;
 import de.joshavg.yaircclient.gui.MainForm;
 import de.joshavg.yaircclient.gui.listener.*;
 
@@ -30,7 +29,6 @@ class GuiController {
         form.addListener(new MessageSend(client, messageDisplay));
 
         client.addListener(new ApiLogger());
-        client.addListener(new ResponseGuiResult(form));
         client.addListener(messageDisplay);
 
         form.setVisible(true);
