@@ -57,7 +57,7 @@ public class OutputTarget extends JTextPane {
         writeln(text, MESSAGE);
     }
 
-    private void jumpToEnd() {
+    public void jumpToEnd() {
         int pos;
         int length = getStyledDocument().getLength();
         String[] lines = getText().split(System.lineSeparator());

@@ -6,6 +6,7 @@ import de.joshavg.yaircclient.api.ClientFactory;
 import de.joshavg.yaircclient.bridge.ApiLogger;
 import de.joshavg.yaircclient.bridge.JoinDisplay;
 import de.joshavg.yaircclient.bridge.MessageDisplay;
+import de.joshavg.yaircclient.bridge.MessageReadStatus;
 import de.joshavg.yaircclient.gui.MainForm;
 import de.joshavg.yaircclient.gui.listener.*;
 
@@ -21,17 +22,20 @@ class GuiController {
 
     void start() {
         MessageDisplay messageDisplay = new MessageDisplay(form);
+        MessageReadStatus messageReadStatus = new MessageReadStatus(form);
 
         form.addListener(new Connect(client));
         form.addListener(new SettingsListener());
         form.addListener(new Exit(client));
-        form.addListener(new Windows(form));
+        form.addListener(new Windows(form, messageReadStatus));
         form.addListener(new ChannelJoinLeave(client));
         form.addListener(new MessageSend(client, messageDisplay));
+        form.addListener(messageReadStatus);
 
         client.addListener(new ApiLogger(form));
         client.addListener(messageDisplay);
         client.addListener(new JoinDisplay());
+        client.addListener(messageReadStatus);
 
         form.setVisible(true);
 

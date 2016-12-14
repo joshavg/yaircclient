@@ -18,7 +18,7 @@ public class JoinDisplay implements ApiListener {
         }
 
         String nick = parsed.get(ResponseParser.Key.NICK).get();
-        String channel = parsed.get(ResponseParser.Key.CHANNEL).get();
+        String channel = parsed.get(ResponseParser.Key.RESPOND_TO).get();
         String user = parsed.get(ResponseParser.Key.USER).get();
 
         String message = String.format("%s (%s) joined", nick, user);

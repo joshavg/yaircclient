@@ -113,4 +113,8 @@ public class Client implements ApiListener {
     public String getNick() {
         return nick;
     }
+
+    public void setNick(String nick) {
+        this.nick = nick;
+    }
 }

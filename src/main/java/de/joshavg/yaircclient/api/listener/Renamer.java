@@ -16,6 +16,7 @@ public class Renamer implements ApiListener {
             tries++;
             String newNick = client.getNick() + tries;
             client.write(Message.nick(newNick));
+            client.setNick(newNick);
         }
     }
 }

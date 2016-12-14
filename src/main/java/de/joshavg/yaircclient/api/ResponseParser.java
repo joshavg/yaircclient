@@ -89,9 +89,9 @@ public class ResponseParser {
             case "PRIVMSG":
                 String target = map.get(Key.TARGET).get();
                 if (target.startsWith("#")) {
-                    map.put(Key.CHANNEL, map.get(Key.TARGET));
+                    map.put(Key.RESPOND_TO, map.get(Key.TARGET));
                 } else {
-                    map.put(Key.FROM, map.get(Key.TARGET));
+                    map.put(Key.RESPOND_TO, map.get(Key.NICK));
                 }
                 map.put(Key.SENDER, map.get(Key.NICK));
                 break;
@@ -109,7 +109,7 @@ public class ResponseParser {
 
     public enum Key {
         PAYLOAD, NICK, USER, SERVER, CMD, TARGET, META,
-        CHANNEL, FROM, SENDER
+        CHANNEL, SENDER, RESPOND_TO
     }
 
     public static class ResponseValue {

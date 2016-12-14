@@ -1,6 +1,5 @@
 package de.joshavg.yaircclient.gui;
 
-import de.joshavg.yaircclient.api.listener.ApiListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,11 +14,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class MainForm extends JFrame implements ApiListener {
+public class MainForm extends JFrame {
 
     private static final Logger LOG = LoggerFactory.getLogger(MainForm.class);
 
     private final JLabel indicator;
+
+    private final JLabel readIndicator;
 
     private final JTextField mainInput;
 
@@ -36,6 +37,10 @@ public class MainForm extends JFrame implements ApiListener {
         indicator = new JLabel("brabbel");
         listeners = new ArrayList<>();
         currentTarget = OutputFactory.createSystem();
+
+        readIndicator = new JLabel("!");
+        readIndicator.setForeground(Color.RED);
+        readIndicator.setVisible(false);
 
         buildTray();
 
@@ -98,6 +103,7 @@ public class MainForm extends JFrame implements ApiListener {
 
         JPanel inputPanel = new JPanel(new BorderLayout());
         inputPanel.add(indicator, BorderLayout.WEST);
+        inputPanel.add(readIndicator, BorderLayout.EAST);
         inputPanel.add(mainInput, BorderLayout.CENTER);
         mainInput.setFont(Font.decode("Monospaced"));
         mainInput.setForeground(Color.LIGHT_GRAY);
@@ -110,9 +116,12 @@ public class MainForm extends JFrame implements ApiListener {
     }
 
     public void setActiveTarget(OutputTarget target) {
+        OutputTarget oldTarget = currentTarget;
         this.currentTarget = target;
         sspMainOutput.setViewportView(target);
         indicator.setText(target.getTarget());
+
+        listeners.forEach(l -> l.targetChanged(oldTarget, this));
     }
 
     public OutputTarget getCurrentTarget() {
@@ -125,6 +134,10 @@ public class MainForm extends JFrame implements ApiListener {
         }
 
         trayIcon.displayMessage(caption, text, TrayIcon.MessageType.INFO);
+    }
+
+    public void showReadIndicator(boolean show) {
+        readIndicator.setVisible(show);
     }
 
 }

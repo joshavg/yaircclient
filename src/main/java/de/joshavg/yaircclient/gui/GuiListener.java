@@ -5,4 +5,7 @@ public interface GuiListener {
     default void messageTyped(String message, MainForm gui) {
     }
 
+    default void targetChanged(OutputTarget oldTarget, MainForm gui) {
+    }
+
 }
