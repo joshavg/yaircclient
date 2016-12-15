@@ -62,27 +62,39 @@ public class MainForm extends JFrame {
         });
     }
 
+    private Image loadIcon() {
+        ClassLoader loader = MainForm.class.getClassLoader();
+        URL iconResource = loader.getResource("tray.png");
+
+        if (iconResource == null) {
+            LOG.warn("icon image could not be found");
+            return null;
+        }
+
+        try {
+            return ImageIO.read(iconResource);
+        } catch (IOException e) {
+            LOG.warn("error loading icon image", e);
+        }
+
+        return null;
+    }
+
     private void buildTray() {
         if (!SystemTray.isSupported()) {
             return;
         }
 
-        ClassLoader loader = MainForm.class.getClassLoader();
-        URL iconResource = loader.getResource("tray.png");
+        Image img = loadIcon();
 
-        if (iconResource == null) {
-            LOG.warn("tray icon image could not be found");
-            return;
-        }
-
-        try {
-            trayIcon = new TrayIcon(ImageIO.read(iconResource), "brabbel");
-            trayIcon.setImageAutoSize(true);
-            SystemTray.getSystemTray().add(trayIcon);
-        } catch (IOException e) {
-            LOG.warn("error loading tray icon image", e);
-        } catch (AWTException e) {
-            LOG.warn("error adding icon to system tray", e);
+        if (img != null) {
+            try {
+                trayIcon = new TrayIcon(img, "brabbel");
+                trayIcon.setImageAutoSize(true);
+                SystemTray.getSystemTray().add(trayIcon);
+            } catch (AWTException e) {
+                LOG.warn("error adding icon to system tray", e);
+            }
         }
     }
 
@@ -96,6 +108,11 @@ public class MainForm extends JFrame {
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
                 | UnsupportedLookAndFeelException e) {
             e.printStackTrace();
+        }
+
+        Image img = loadIcon();
+        if (img != null) {
+            setIconImage(img);
         }
 
         Container contentPane = getContentPane();
