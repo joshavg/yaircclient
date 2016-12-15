@@ -13,8 +13,8 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 
+import static de.joshavg.yaircclient.gui.ActionType.HIGHLIGHT;
 import static de.joshavg.yaircclient.gui.ActionType.MESSAGE;
-import static de.joshavg.yaircclient.gui.ActionType.NOTICE;
 
 public class MessageDisplay implements ApiListener {
     private static final DateFormat DATE_FORMAT = DateFormat.getTimeInstance(DateFormat.DEFAULT, Locale.getDefault());
@@ -40,7 +40,7 @@ public class MessageDisplay implements ApiListener {
 
         ActionType type = MESSAGE;
         if (notified) {
-            type = NOTICE;
+            type = HIGHLIGHT;
         }
 
         displayMessage(OutputFactory.getOrCreate(respondTo), sender, payload, type);

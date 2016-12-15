@@ -85,6 +85,7 @@ public class ResponseParser {
         switch (map.get(Key.CMD).get()) {
             case "JOIN":
                 map.put(Key.CHANNEL, map.get(Key.TARGET));
+                map.put(Key.RESPOND_TO, map.get(Key.TARGET));
                 break;
             case "PRIVMSG":
                 String target = map.get(Key.TARGET).get();

@@ -46,7 +46,7 @@ public class MainForm extends JFrame {
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setTitle("brabbel");
-        setSize(800, 400);
+        setSize(700, 600);
 
         buildGui();
 

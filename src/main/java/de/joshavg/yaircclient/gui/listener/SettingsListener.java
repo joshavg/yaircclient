@@ -89,6 +89,9 @@ public class SettingsListener implements GuiListener {
             case "autoconnect":
                 cfg.set("autoconnect", Boolean.valueOf(value));
                 break;
+            case "autojoin":
+                cfg.set("autojoin", Boolean.valueOf(value));
+                break;
         }
 
         Settings.write(cfg);
@@ -117,6 +120,7 @@ public class SettingsListener implements GuiListener {
         target.writeln("port       : " + cx.get("port"));
         target.writeln("nick       : " + cfg.get("nick"));
         target.writeln("autoconnect: " + cfg.get("autoconnect"));
+        target.writeln("autojoin   : " + cfg.get("autojoin"));
         target.writeln("path       : " + Settings.PATH);
     }
 }
