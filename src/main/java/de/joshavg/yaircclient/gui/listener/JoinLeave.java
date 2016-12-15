@@ -7,10 +7,10 @@ import de.joshavg.yaircclient.gui.MainForm;
 import de.joshavg.yaircclient.gui.OutputFactory;
 import de.joshavg.yaircclient.gui.OutputTarget;
 
-public class ChannelJoinLeave implements GuiListener {
+public class JoinLeave implements GuiListener {
     private Client client;
 
-    public ChannelJoinLeave(Client client) {
+    public JoinLeave(Client client) {
         this.client = client;
     }
 
@@ -38,7 +38,9 @@ public class ChannelJoinLeave implements GuiListener {
     }
 
     private void joinChannel(MainForm gui, String channel) {
-        client.write(Message.join(channel));
+        if (channel.startsWith("#")) {
+            client.write(Message.join(channel));
+        }
 
         OutputTarget target = OutputFactory.getOrCreate(channel);
         gui.setActiveTarget(target);

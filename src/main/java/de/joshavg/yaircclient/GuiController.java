@@ -28,7 +28,7 @@ class GuiController {
         form.addListener(new SettingsListener());
         form.addListener(new Exit(client));
         form.addListener(new Windows(form, messageReadStatus));
-        form.addListener(new ChannelJoinLeave(client));
+        form.addListener(new JoinLeave(client));
         form.addListener(new MessageSend(client, messageDisplay));
         form.addListener(messageReadStatus);
 

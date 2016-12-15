@@ -1,7 +1,12 @@
 package de.joshavg.yaircclient.gui.listener;
 
 import de.joshavg.yaircclient.bridge.MessageReadStatus;
-import de.joshavg.yaircclient.gui.*;
+import de.joshavg.yaircclient.gui.GuiListener;
+import de.joshavg.yaircclient.gui.MainForm;
+import de.joshavg.yaircclient.gui.OutputFactory;
+import de.joshavg.yaircclient.gui.OutputTarget;
+
+import static de.joshavg.yaircclient.gui.ActionType.ERROR;
 
 public class Windows implements GuiListener {
 
@@ -21,10 +26,23 @@ public class Windows implements GuiListener {
             return;
         }
 
-        if (split.length == 1 || split[1].equals("l")) {
+        if (split.length == 1) {
             listWindows();
         } else if (split.length == 2) {
             setActiveWindow(split[1]);
+        } else if (split.length == 3 && split[1].equals("r")) {
+            String window = split[2];
+            removeWindow(window);
+        }
+    }
+
+    private void removeWindow(String window) {
+        if (window.equals(OutputFactory.getSystem().getTarget())) {
+            form.getCurrentTarget().writeln("cannot remove the system window", ERROR);
+        } else if (window.equals(form.getCurrentTarget().getTarget())) {
+            form.getCurrentTarget().writeln("cannot remove the current window", ERROR);
+        } else {
+            OutputFactory.remove(window);
         }
     }
 
@@ -34,7 +52,7 @@ public class Windows implements GuiListener {
             form.setActiveTarget(target);
             target.jumpToEnd();
         } else {
-            form.getCurrentTarget().writeln("unknown window: \"" + name + "\"", ActionType.ERROR);
+            form.getCurrentTarget().writeln("unknown window: \"" + name + "\"", ERROR);
         }
     }
 
