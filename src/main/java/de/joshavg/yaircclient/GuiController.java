@@ -33,8 +33,8 @@ class GuiController {
         client.addListener(new ApiLogger(form));
         client.addListener(messageDisplay);
         client.addListener(new JoinDisplay());
+        client.addListener(new PartDisplay());
         client.addListener(messageReadStatus);
-
 
         JsonObject cfg = Settings.read();
         boolean autojoin = cfg.getBoolean("autojoin", false);
