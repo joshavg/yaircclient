@@ -50,16 +50,27 @@ public class MainForm extends JFrame {
 
         buildGui();
 
-        final MainForm gui = this;
         mainInput.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    listeners.forEach(l -> l.messageTyped(mainInput.getText(), gui));
-                    mainInput.setText("");
-                }
+                handleMainInputKeyEvent(e);
             }
         });
+    }
+
+    private void handleMainInputKeyEvent(KeyEvent e) {
+        switch (e.getKeyCode()) {
+            case KeyEvent.VK_ENTER:
+                listeners.forEach(l -> l.messageTyped(mainInput.getText(), this));
+                mainInput.setText("");
+                break;
+            case KeyEvent.VK_UP:
+                listeners.forEach(l -> l.arrowUp(this, mainInput));
+                break;
+            case KeyEvent.VK_DOWN:
+                listeners.forEach(l -> l.arrowDown(this, mainInput));
+                break;
+        }
     }
 
     private Image loadIcon() {

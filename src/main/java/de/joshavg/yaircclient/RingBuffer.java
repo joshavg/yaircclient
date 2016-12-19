@@ -12,7 +12,7 @@ public class RingBuffer<T> extends ArrayList<T> {
     public boolean add(final T e) {
         ++this.size;
         final boolean b = super.add(e);
-        this.position = super.indexOf(e);
+        this.position = size;
         return b;
     }
 

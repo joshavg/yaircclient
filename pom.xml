@@ -6,7 +6,7 @@
 
     <groupId>de.joshavg</groupId>
     <artifactId>yaircclient</artifactId>
-    <version>0.3</version>
+    <version>0.4</version>
 
     <url>https://github.com/joshavg/yaircclient</url>
     <name>Yet Another IRC Client</name>

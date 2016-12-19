@@ -6,6 +6,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.Socket;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -24,8 +26,11 @@ public class Client implements ApiListener {
 
     private boolean isConnected;
 
+    private final Charset utf8Charset;
+
     Client() {
-        this.listeners = new HashSet<>();
+        listeners = new HashSet<>();
+        utf8Charset = StandardCharsets.UTF_8;
     }
 
     public void addListener(ApiListener l) {
@@ -40,8 +45,8 @@ public class Client implements ApiListener {
                 socket = new Socket(host, port);
                 socket.setKeepAlive(true);
 
-                BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
-                writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"));
+                BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), utf8Charset));
+                writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), utf8Charset));
 
                 write(Message.user(nick));
                 write(Message.nick(nick));

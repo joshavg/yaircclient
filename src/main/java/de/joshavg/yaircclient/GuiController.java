@@ -5,6 +5,7 @@ import de.joshavg.yaircclient.api.Client;
 import de.joshavg.yaircclient.api.ClientFactory;
 import de.joshavg.yaircclient.bridge.*;
 import de.joshavg.yaircclient.gui.MainForm;
+import de.joshavg.yaircclient.gui.listener.MessageHistory;
 import de.joshavg.yaircclient.gui.listener.*;
 
 class GuiController {
@@ -29,11 +30,12 @@ class GuiController {
         form.addListener(new MessageSend(client, messageDisplay));
         form.addListener(messageReadStatus);
         form.addListener(new NickChange(client));
+        form.addListener(new MessageHistory());
 
         client.addListener(new ApiLogger(form));
         client.addListener(messageDisplay);
         client.addListener(new JoinDisplay());
-        client.addListener(new PartDisplay());
+        client.addListener(new PartDisplay(form));
         client.addListener(messageReadStatus);
 
         JsonObject cfg = Settings.read();

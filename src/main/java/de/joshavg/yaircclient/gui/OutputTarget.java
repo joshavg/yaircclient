@@ -58,13 +58,8 @@ public class OutputTarget extends JTextPane {
     }
 
     public void jumpToEnd() {
-        int pos;
         int length = getStyledDocument().getLength();
-        String[] lines = getText().split(System.lineSeparator());
-        String lastLine = lines[lines.length - 1];
-        pos = length - lastLine.length();
-
-        setCaretPosition(pos);
+        setCaretPosition(length - 1);
     }
 
     public String getTarget() {
