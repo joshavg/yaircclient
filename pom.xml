@@ -6,10 +6,16 @@
 
     <groupId>de.joshavg</groupId>
     <artifactId>yaircclient</artifactId>
-    <version>0.4</version>
+    <version>0.4.0.5</version>
 
     <url>https://github.com/joshavg/yaircclient</url>
     <name>Yet Another IRC Client</name>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <sonar.language>java</sonar.language>
+        <sonar.host.url>https://sonarqube.com</sonar.host.url>
+    </properties>
 
     <distributionManagement>
         <repository>

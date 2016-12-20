@@ -15,7 +15,7 @@ public class NickChange implements GuiListener {
     @Override
     public void messageTyped(String message, MainForm gui) {
         String[] split = message.split(" ");
-        if (!split[0].equals("/n")) {
+        if (!"/n".equals(split[0])) {
             return;
         }
 

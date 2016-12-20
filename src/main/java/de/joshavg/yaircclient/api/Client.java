@@ -39,6 +39,9 @@ public class Client implements ApiListener {
 
     public void connect(String host, String nick, int port) {
         this.nick = nick;
+        if (socket != null && !socket.isClosed()) {
+            throw new IllegalStateException("socket is already in use");
+        }
 
         new Thread(() -> {
             try {
@@ -48,15 +51,8 @@ public class Client implements ApiListener {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), utf8Charset));
                 writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), utf8Charset));
 
-                write(Message.user(nick));
-                write(Message.nick(nick));
-
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    isConnected = true;
-
-                    handleServerResponse(line);
-                }
+                publishIdent(nick);
+                handleSocketLifecycle(reader);
             } catch (IOException e) {
                 LOG.error("error in socket", e);
                 isConnected = false;
@@ -64,12 +60,25 @@ public class Client implements ApiListener {
         }).start();
     }
 
+    private void publishIdent(String nick) {
+        write(Message.user(nick));
+        write(Message.nick(nick));
+    }
+
+    private void handleSocketLifecycle(BufferedReader reader) throws IOException {
+        String line;
+        while ((line = reader.readLine()) != null) {
+            isConnected = true;
+            handleServerResponse(line);
+        }
+    }
+
     private void handleServerResponse(String line) {
         LOG.trace("incoming: " + line);
         Map<ResponseParser.Key, ResponseParser.ResponseValue> parsed = new ResponseParser(line).parse();
         LOG.trace("parsed: " + parsed);
 
-        if (parsed.get(ResponseParser.Key.CMD).get().equals("376")) {
+        if ("376".equals(parsed.get(ResponseParser.Key.CMD).get())) {
             listeners.forEach(l -> l.connected(this));
         } else {
             listeners.forEach(l -> l.parsed(parsed, this));
@@ -96,7 +105,7 @@ public class Client implements ApiListener {
 
     @Override
     public void parsed(Map<ResponseParser.Key, ResponseParser.ResponseValue> parsed, Client client) {
-        if (parsed.get(ResponseParser.Key.CMD).get().equals("PING")) {
+        if ("PING".equals(parsed.get(ResponseParser.Key.CMD).get())) {
             write("PONG " + parsed.get(ResponseParser.Key.PAYLOAD));
         }
     }

@@ -1,5 +1,8 @@
 package de.joshavg.yaircclient.gui;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Style;
@@ -10,6 +13,8 @@ import java.awt.*;
 import static de.joshavg.yaircclient.gui.ActionType.*;
 
 public class OutputTarget extends JTextPane {
+
+    private static final Logger LOG = LoggerFactory.getLogger(OutputTarget.class);
 
     private final String target;
 
@@ -47,7 +52,7 @@ public class OutputTarget extends JTextPane {
             String write = text + System.lineSeparator();
             doc.insertString(doc.getLength(), write, getStyle(type.name()));
         } catch (BadLocationException e) {
-            e.printStackTrace();
+            LOG.error("could not scroll to the bottom", e);
         }
 
         jumpToEnd();

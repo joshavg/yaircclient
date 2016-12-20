@@ -6,7 +6,7 @@ import java.util.Map;
 
 public class OutputFactory {
 
-    private static Map<String, OutputTarget> TARGETS = new HashMap<>();
+    private static final Map<String, OutputTarget> TARGETS = new HashMap<>();
 
     private OutputFactory() {
     }

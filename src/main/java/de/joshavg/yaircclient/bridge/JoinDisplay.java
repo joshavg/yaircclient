@@ -13,7 +13,7 @@ public class JoinDisplay implements ApiListener {
     @Override
     public void parsed(Map<ResponseParser.Key, ResponseParser.ResponseValue> parsed, Client client) {
         String command = parsed.get(ResponseParser.Key.CMD).get();
-        if (!command.equals("JOIN")) {
+        if (!"JOIN".equals(command)) {
             return;
         }
 

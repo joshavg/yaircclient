@@ -8,7 +8,7 @@ import java.util.Map;
 public class Disconnector implements ApiListener {
     @Override
     public void parsed(Map<ResponseParser.Key, ResponseParser.ResponseValue> parsed, Client client) {
-        if (parsed.get(ResponseParser.Key.CMD).get().equals("ERROR")) {
+        if ("ERROR".equals(parsed.get(ResponseParser.Key.CMD).get())) {
             client.quit();
         }
     }

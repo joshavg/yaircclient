@@ -22,9 +22,9 @@ public class PartDisplay implements ApiListener {
     @Override
     public void parsed(Map<ResponseParser.Key, ResponseParser.ResponseValue> parsed, Client client) {
         String command = parsed.get(CMD).get();
-        if (command.equals("PART")) {
+        if ("PART".equals(command)) {
             handlePart(parsed);
-        } else if (command.equals("QUIT")) {
+        } else if ("QUIT".equals(command)) {
             handleQuit(parsed);
         }
     }

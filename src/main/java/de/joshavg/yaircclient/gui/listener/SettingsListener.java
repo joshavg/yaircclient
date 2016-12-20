@@ -5,10 +5,7 @@ import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.JsonValue;
 import com.eclipsesource.json.WriterConfig;
 import de.joshavg.yaircclient.Settings;
-import de.joshavg.yaircclient.gui.GuiListener;
-import de.joshavg.yaircclient.gui.MainForm;
-import de.joshavg.yaircclient.gui.OutputFactory;
-import de.joshavg.yaircclient.gui.OutputTarget;
+import de.joshavg.yaircclient.gui.*;
 
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -17,6 +14,8 @@ import java.util.regex.Pattern;
 public class SettingsListener implements GuiListener {
 
     private static final Pattern pattern = Pattern.compile("/s\\s?([a-z])?\\s?([^\\s]+)?\\s?([^\\s]+)?");
+    private static final String SETTING_AUTOCONNECT = "autoconnect";
+    private static final String SETTING_AUTOJOIN = "autojoin";
 
     @Override
     public void messageTyped(String message, MainForm gui) {
@@ -86,12 +85,14 @@ public class SettingsListener implements GuiListener {
             case "nick":
                 cfg.set("nick", value);
                 break;
-            case "autoconnect":
-                cfg.set("autoconnect", Boolean.valueOf(value));
+            case SETTING_AUTOCONNECT:
+                cfg.set(SETTING_AUTOCONNECT, Boolean.valueOf(value));
                 break;
-            case "autojoin":
-                cfg.set("autojoin", Boolean.valueOf(value));
+            case SETTING_AUTOJOIN:
+                cfg.set(SETTING_AUTOJOIN, Boolean.valueOf(value));
                 break;
+            default:
+                OutputFactory.getSystem().writeln("unknown setting " + name, ActionType.ERROR);
         }
 
         Settings.write(cfg);
@@ -119,8 +120,8 @@ public class SettingsListener implements GuiListener {
         target.writeln("url        : " + cx.get("url"));
         target.writeln("port       : " + cx.get("port"));
         target.writeln("nick       : " + cfg.get("nick"));
-        target.writeln("autoconnect: " + cfg.get("autoconnect"));
-        target.writeln("autojoin   : " + cfg.get("autojoin"));
+        target.writeln("autoconnect: " + cfg.get(SETTING_AUTOCONNECT));
+        target.writeln("autojoin   : " + cfg.get(SETTING_AUTOJOIN));
         target.writeln("path       : " + Settings.PATH);
     }
 }

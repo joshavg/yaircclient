@@ -16,6 +16,8 @@ import java.util.List;
 
 public class MainForm extends JFrame {
 
+    private static final String APPLICATION_TITLE = "brabbel";
+
     private static final Logger LOG = LoggerFactory.getLogger(MainForm.class);
 
     private final JLabel indicator;
@@ -24,17 +26,17 @@ public class MainForm extends JFrame {
 
     private final JTextField mainInput;
 
-    private final List<GuiListener> listeners;
+    private final transient List<GuiListener> listeners;
 
     private JScrollPane sspMainOutput;
 
     private OutputTarget currentTarget;
 
-    private TrayIcon trayIcon;
+    private transient TrayIcon trayIcon;
 
     public MainForm() {
         mainInput = new JTextField();
-        indicator = new JLabel("brabbel");
+        indicator = new JLabel(APPLICATION_TITLE);
         listeners = new ArrayList<>();
         currentTarget = OutputFactory.createSystem();
 
@@ -45,7 +47,7 @@ public class MainForm extends JFrame {
         buildTray();
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setTitle("brabbel");
+        setTitle(APPLICATION_TITLE);
         setSize(700, 600);
 
         buildGui();
@@ -70,6 +72,8 @@ public class MainForm extends JFrame {
             case KeyEvent.VK_DOWN:
                 listeners.forEach(l -> l.arrowDown(this, mainInput));
                 break;
+            default:
+                // do nothing, normal input
         }
     }
 
@@ -100,7 +104,7 @@ public class MainForm extends JFrame {
 
         if (img != null) {
             try {
-                trayIcon = new TrayIcon(img, "brabbel");
+                trayIcon = new TrayIcon(img, APPLICATION_TITLE);
                 trayIcon.setImageAutoSize(true);
                 SystemTray.getSystemTray().add(trayIcon);
             } catch (AWTException e) {
@@ -118,7 +122,7 @@ public class MainForm extends JFrame {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
                 | UnsupportedLookAndFeelException e) {
-            e.printStackTrace();
+            LOG.warn("could not set look and feel", e);
         }
 
         Image img = loadIcon();

@@ -1,6 +1,8 @@
 package de.joshavg.yaircclient;
 
 import com.eclipsesource.json.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileReader;
@@ -11,9 +13,15 @@ public class Settings {
 
     public static final String PATH;
 
+    private static final Logger LOG = LoggerFactory.getLogger(Settings.class);
+
     static {
         String userHome = System.getProperty("user.home");
         PATH = userHome + File.separator + ".config" + File.separator + "brabbel.json";
+    }
+
+    private Settings() {
+        // no construction needed
     }
 
     private static JsonObject createDefaultCfg() {
@@ -48,7 +56,8 @@ public class Settings {
             FileReader fileReader = new FileReader(PATH);
             return Json.parse(fileReader).asObject();
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("could not read settings file. this is either, because you started the application the first" +
+                    " time or your file system is not properly configured", e);
         }
 
         return createDefaultCfg();
@@ -58,7 +67,7 @@ public class Settings {
         try (FileWriter writer = new FileWriter(PATH)) {
             value.writeTo(writer, WriterConfig.PRETTY_PRINT);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("could write read settings file", e);
         }
     }
 

@@ -18,12 +18,7 @@ public class Exit implements GuiListener {
     public void messageTyped(String message, MainForm gui) {
         switch (message) {
             case "/e":
-                if (!confirmWarned) {
-                    gui.getCurrentTarget().writeln("type again to confirm", ActionType.ERROR);
-                    confirmWarned = true;
-                } else {
-                    quit(gui);
-                }
+                handleExitCall(gui);
                 break;
             case "/e!":
                 quit(gui);
@@ -31,6 +26,15 @@ public class Exit implements GuiListener {
             default:
                 confirmWarned = false;
                 break;
+        }
+    }
+
+    private void handleExitCall(MainForm gui) {
+        if (!confirmWarned) {
+            gui.getCurrentTarget().writeln("type again to confirm", ActionType.ERROR);
+            confirmWarned = true;
+        } else {
+            quit(gui);
         }
     }
 

@@ -22,7 +22,7 @@ public class Windows implements GuiListener {
     public void messageTyped(String message, MainForm gui) {
         String[] split = message.split("\\s");
 
-        if (!split[0].equals("/w")) {
+        if (!"/w".equals(split[0])) {
             return;
         }
 
@@ -30,7 +30,7 @@ public class Windows implements GuiListener {
             listWindows();
         } else if (split.length == 2) {
             setActiveWindow(split[1]);
-        } else if (split.length == 3 && split[1].equals("r")) {
+        } else if (split.length == 3 && "r".equals(split[1])) {
             String window = split[2];
             removeWindow(window);
         }

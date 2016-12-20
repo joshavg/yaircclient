@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -22,7 +22,7 @@ public class ResponseParser {
     Map<Key, ResponseValue> parse() {
         LOG.trace("parsing " + line);
 
-        Map<Key, ResponseValue> map = new HashMap<>();
+        EnumMap<Key, ResponseValue> map = new EnumMap<>(Key.class);
         prepareMap(map);
 
         String workLine = line;
@@ -82,24 +82,7 @@ public class ResponseParser {
     }
 
     private void postProcess(Map<Key, ResponseValue> map) {
-        switch (map.get(Key.CMD).get()) {
-            case "JOIN":
-                map.put(Key.CHANNEL, map.get(Key.TARGET));
-                map.put(Key.RESPOND_TO, map.get(Key.TARGET));
-                break;
-            case "PRIVMSG":
-                String target = map.get(Key.TARGET).get();
-                if (target.startsWith("#")) {
-                    map.put(Key.RESPOND_TO, map.get(Key.TARGET));
-                } else {
-                    map.put(Key.RESPOND_TO, map.get(Key.NICK));
-                }
-                map.put(Key.SENDER, map.get(Key.NICK));
-                break;
-            case "PART":
-                map.put(Key.CHANNEL, map.get(Key.TARGET));
-                break;
-        }
+        new PostProcessor(map).postprocess();
     }
 
     private void prepareMap(Map<Key, ResponseValue> map) {

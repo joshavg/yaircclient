@@ -26,7 +26,7 @@ public class ApiLogger implements ApiListener {
                 parsed.get(ResponseParser.Key.PAYLOAD));
         target.writeln(message, ActionType.NOTICE);
 
-        if (parsed.get(ResponseParser.Key.CMD).get().equals("NICK")) {
+        if ("NICK".equals(parsed.get(ResponseParser.Key.CMD).get())) {
             nickChange(parsed);
         }
     }

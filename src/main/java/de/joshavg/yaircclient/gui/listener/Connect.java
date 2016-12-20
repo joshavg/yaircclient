@@ -29,7 +29,7 @@ public class Connect implements GuiListener {
 
     @Override
     public void messageTyped(String message, MainForm gui) {
-        if (!message.equals("/c")) {
+        if (!"/c".equals(message)) {
             return;
         }
 

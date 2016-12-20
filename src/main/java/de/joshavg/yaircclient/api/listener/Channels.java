@@ -9,7 +9,7 @@ import java.util.Set;
 
 public class Channels implements ApiListener {
 
-    private Set<String> channels = new HashSet<>();
+    private Set<String> openChannels = new HashSet<>();
 
     @Override
     public void parsed(Map<ResponseParser.Key, ResponseParser.ResponseValue> parsed, Client client) {
@@ -22,10 +22,10 @@ public class Channels implements ApiListener {
             return;
         }
 
-        if (command.equals("JOIN")) {
-            channels.add(target);
-        } else if (command.equals("PART")) {
-            channels.remove(target);
+        if ("JOIN".equals(command)) {
+            openChannels.add(target);
+        } else if ("PART".equals(command)) {
+            openChannels.remove(target);
         }
     }
 }

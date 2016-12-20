@@ -18,9 +18,9 @@ public class JoinLeave implements GuiListener {
     public void messageTyped(String message, MainForm gui) {
         String[] split = message.split(" ");
 
-        if (split[0].equals("/j")) {
+        if ("/j".equals(split[0])) {
             joinChannel(gui, split[1]);
-        } else if (split[0].equals("/p")) {
+        } else if ("/p".equals(split[0])) {
             partChannel(gui, split);
         }
     }

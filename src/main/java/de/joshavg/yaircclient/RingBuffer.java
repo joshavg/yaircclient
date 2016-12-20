@@ -56,4 +56,28 @@ public class RingBuffer<T> extends ArrayList<T> {
         return super.remove(o);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
+
+        RingBuffer<?> that = (RingBuffer<?>) o;
+
+        return position == that.position && size == that.size;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + position;
+        result = 31 * result + size;
+        return result;
+    }
 }

@@ -14,7 +14,7 @@ public class Renamer implements ApiListener {
 
     @Override
     public void parsed(Map<ResponseParser.Key, ResponseParser.ResponseValue> parsed, Client client) {
-        if (parsed.get(ResponseParser.Key.CMD).get().equals("433")) {
+        if ("433".equals(parsed.get(ResponseParser.Key.CMD).get())) {
             if (originalNick == null) {
                 originalNick = client.getNick();
             }

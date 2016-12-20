@@ -22,7 +22,7 @@ public class MessageReadStatus implements ApiListener, GuiListener {
 
     @Override
     public void parsed(Map<ResponseParser.Key, ResponseParser.ResponseValue> parsed, Client client) {
-        if (!parsed.get(ResponseParser.Key.CMD).get().equals("PRIVMSG")) {
+        if (!"PRIVMSG".equals(parsed.get(ResponseParser.Key.CMD).get())) {
             return;
         }
 
