@@ -6,6 +6,8 @@ import org.slf4j.LoggerFactory;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
@@ -56,6 +58,12 @@ public class MainForm extends JFrame {
             @Override
             public void keyPressed(KeyEvent e) {
                 handleMainInputKeyEvent(e);
+            }
+        });
+        addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                mainInput.requestFocusInWindow();
             }
         });
     }
