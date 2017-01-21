@@ -10,17 +10,18 @@ class PostProcessor {
 
     private final Map<ResponseParser.Key, ResponseParser.ResponseValue> map;
 
-    public PostProcessor(Map<ResponseParser.Key, ResponseParser.ResponseValue> parsed) {
+    PostProcessor(Map<ResponseParser.Key, ResponseParser.ResponseValue> parsed) {
         this.map = parsed;
     }
 
-    public void postprocess() {
+    void postprocess() {
         Map<String, Runnable> methods = new HashMap<>();
         methods.put("JOIN", this::postProcessJoin);
         methods.put("PRIVMSG", this::postProcessPrivmsg);
         methods.put("PART", this::postProcessPart);
 
-        methods.get(map.get(CMD).get()).run();
+        String cmd = map.get(CMD).get();
+        methods.get(cmd).run();
     }
 
     private void postProcessPart() {
