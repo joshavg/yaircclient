@@ -21,6 +21,7 @@ class GuiController {
     void start() {
         MessageDisplay messageDisplay = new MessageDisplay(form);
         MessageReadStatus messageReadStatus = new MessageReadStatus(form);
+        UsersDisplay usersDisplay = new UsersDisplay();
 
         form.addListener(new Connect(client));
         form.addListener(new SettingsListener());
@@ -31,12 +32,14 @@ class GuiController {
         form.addListener(messageReadStatus);
         form.addListener(new NickChange(client));
         form.addListener(new MessageHistory());
+        form.addListener(usersDisplay);
 
         client.addListener(new ApiLogger(form));
         client.addListener(messageDisplay);
         client.addListener(new JoinDisplay());
         client.addListener(new PartDisplay(form));
         client.addListener(messageReadStatus);
+        client.addListener(usersDisplay);
 
         JsonObject cfg = Settings.read();
         boolean autojoin = cfg.getBoolean("autojoin", false);
