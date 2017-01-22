@@ -10,10 +10,13 @@ public interface GuiListener {
     default void targetChanged(OutputTarget oldTarget, MainForm gui) {
     }
 
-    default void arrowUp(MainForm gui, JTextField field) {
+    default void arrowUpPressed(MainForm gui, JTextField field) {
     }
 
-    default void arrowDown(MainForm gui, JTextField field) {
+    default void arrowDownPressed(MainForm gui, JTextField field) {
+    }
+
+    default void tabPressed(MainForm gui, JTextField field) {
     }
 
 }

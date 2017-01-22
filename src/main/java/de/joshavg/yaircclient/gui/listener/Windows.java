@@ -1,10 +1,13 @@
 package de.joshavg.yaircclient.gui.listener;
 
 import de.joshavg.yaircclient.bridge.MessageReadStatus;
-import de.joshavg.yaircclient.gui.GuiListener;
-import de.joshavg.yaircclient.gui.MainForm;
-import de.joshavg.yaircclient.gui.OutputFactory;
-import de.joshavg.yaircclient.gui.OutputTarget;
+import de.joshavg.yaircclient.gui.*;
+
+import javax.swing.*;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static de.joshavg.yaircclient.gui.ActionType.ERROR;
 
@@ -18,13 +21,17 @@ public class Windows implements GuiListener {
         this.readStatus = readStatus;
     }
 
+    private boolean affectsMe(String text) {
+        return text.startsWith("/w ") || text.equals("/w");
+    }
+
     @Override
     public void messageTyped(String message, MainForm gui) {
-        String[] split = message.split("\\s");
-
-        if (!"/w".equals(split[0])) {
+        if (!affectsMe(message)) {
             return;
         }
+
+        String[] split = message.split("\\s");
 
         if (split.length == 1) {
             listWindows();
@@ -33,6 +40,31 @@ public class Windows implements GuiListener {
         } else if (split.length == 3 && "r".equals(split[1])) {
             String window = split[2];
             removeWindow(window);
+        }
+    }
+
+    @Override
+    public void tabPressed(MainForm gui, JTextField field) {
+        String text = field.getText();
+
+        if (!affectsMe(text)) {
+            return;
+        }
+
+        String[] split = text.split("\\s");
+        if (split.length == 2) {
+            String search = split[1];
+            List<String> outputs = OutputFactory
+                    .getAll()
+                    .keySet()
+                    .stream()
+                    .filter(on -> on.startsWith(search))
+                    .collect(Collectors.toList());
+            if (outputs.size() == 1) {
+                field.setText("/w " + outputs.get(0));
+            } else {
+                outputs.forEach(on -> gui.getCurrentTarget().writeln(on, ActionType.NOTICE));
+            }
         }
     }
 

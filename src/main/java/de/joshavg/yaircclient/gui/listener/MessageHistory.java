@@ -14,12 +14,12 @@ public class MessageHistory implements GuiListener {
     }
 
     @Override
-    public void arrowUp(MainForm gui, JTextField field) {
+    public void arrowUpPressed(MainForm gui, JTextField field) {
         field.setText(buffer.prev());
     }
 
     @Override
-    public void arrowDown(MainForm gui, JTextField field) {
+    public void arrowDownPressed(MainForm gui, JTextField field) {
         field.setText(buffer.next());
     }
 

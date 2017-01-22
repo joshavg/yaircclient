@@ -13,6 +13,7 @@ import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -75,10 +76,14 @@ public class MainForm extends JFrame {
                 mainInput.setText("");
                 break;
             case KeyEvent.VK_UP:
-                listeners.forEach(l -> l.arrowUp(this, mainInput));
+                listeners.forEach(l -> l.arrowUpPressed(this, mainInput));
                 break;
             case KeyEvent.VK_DOWN:
-                listeners.forEach(l -> l.arrowDown(this, mainInput));
+                listeners.forEach(l -> l.arrowDownPressed(this, mainInput));
+                break;
+            case KeyEvent.VK_TAB:
+                e.consume();
+                listeners.forEach(l -> l.tabPressed(this, mainInput));
                 break;
             default:
                 // do nothing, normal input
@@ -149,6 +154,7 @@ public class MainForm extends JFrame {
         mainInput.setForeground(Color.LIGHT_GRAY);
         mainInput.setCaretColor(Color.LIGHT_GRAY);
         mainInput.setBackground(Color.BLACK);
+        mainInput.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, Collections.emptySet());
 
         JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, inputPanel, sspMainOutput);
 

@@ -21,7 +21,9 @@ class PostProcessor {
         methods.put("PART", this::postProcessPart);
 
         String cmd = map.get(CMD).get();
-        methods.get(cmd).run();
+        if (methods.containsKey(cmd)) {
+            methods.get(cmd).run();
+        }
     }
 
     private void postProcessPart() {
