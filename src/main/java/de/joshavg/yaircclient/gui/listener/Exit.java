@@ -4,12 +4,14 @@ import de.joshavg.yaircclient.api.Client;
 import de.joshavg.yaircclient.gui.ActionType;
 import de.joshavg.yaircclient.gui.GuiListener;
 import de.joshavg.yaircclient.gui.MainForm;
+import javax.inject.Inject;
 
 public class Exit implements GuiListener {
 
     private boolean confirmWarned;
     private Client client;
 
+    @Inject
     public Exit(Client client) {
         this.client = client;
     }

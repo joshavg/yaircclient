@@ -9,12 +9,16 @@ import de.joshavg.yaircclient.gui.OutputTarget;
 
 import java.util.HashMap;
 import java.util.Map;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
+@Singleton
 public class MessageReadStatus implements ApiListener, GuiListener {
     private final MainForm form;
 
     private final Map<String, Boolean> unreadMessages;
 
+    @Inject
     public MessageReadStatus(MainForm form) {
         this.form = form;
         unreadMessages = new HashMap<>();

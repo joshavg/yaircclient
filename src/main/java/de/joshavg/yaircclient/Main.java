@@ -7,8 +7,10 @@ public class Main {
     }
 
     public static void main(String... args) {
-        Settings.createIfNotExists();
-        new GuiController().start();
+        Brabbel brabbel = DaggerBrabbel.create();
+
+        brabbel.settings().createIfNotExists();
+        brabbel.guiController().start(brabbel);
     }
 
 }

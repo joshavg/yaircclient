@@ -12,6 +12,7 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
+import javax.inject.Inject;
 
 import static de.joshavg.yaircclient.gui.ActionType.HIGHLIGHT;
 import static de.joshavg.yaircclient.gui.ActionType.MESSAGE;
@@ -20,9 +21,12 @@ public class MessageDisplay implements ApiListener {
     private static final DateFormat DATE_FORMAT = DateFormat.getTimeInstance(DateFormat.DEFAULT, Locale.getDefault());
 
     private final MainForm form;
+    private final OutputFactory outputFactory;
 
-    public MessageDisplay(MainForm form) {
+    @Inject
+    public MessageDisplay(MainForm form, OutputFactory outputFactory) {
         this.form = form;
+        this.outputFactory = outputFactory;
     }
 
     @Override
@@ -43,7 +47,7 @@ public class MessageDisplay implements ApiListener {
             type = HIGHLIGHT;
         }
 
-        displayMessage(OutputFactory.getOrCreate(respondTo), sender, payload, type);
+        displayMessage(outputFactory.getOrCreate(respondTo), sender, payload, type);
     }
 
     private boolean notify(Client client, String target, String payload) {

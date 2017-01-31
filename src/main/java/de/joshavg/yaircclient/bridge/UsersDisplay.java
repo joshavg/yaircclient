@@ -7,16 +7,20 @@ import de.joshavg.yaircclient.api.listener.ApiListener;
 import de.joshavg.yaircclient.gui.*;
 
 import java.util.Map;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
+@Singleton
 public class UsersDisplay implements ApiListener, GuiListener {
 
-    private Client client;
-
+    private final Client client;
+    private final OutputFactory outputFactory;
     private String channel;
 
-    @Override
-    public void connected(Client client) {
+    @Inject
+    UsersDisplay(Client client, OutputFactory outputFactory) {
         this.client = client;
+        this.outputFactory = outputFactory;
     }
 
     @Override
@@ -29,7 +33,7 @@ public class UsersDisplay implements ApiListener, GuiListener {
         }
 
         if ("353".equals(cmd)) {
-            OutputFactory.get(channel).writeln(parsed.get(ResponseParser.Key.PAYLOAD).get(), ActionType.NOTICE);
+            outputFactory.get(channel).writeln(parsed.get(ResponseParser.Key.PAYLOAD).get(), ActionType.NOTICE);
         } else if("366".equals(cmd)) {
             channel = "";
         }
@@ -46,6 +50,7 @@ public class UsersDisplay implements ApiListener, GuiListener {
 
         if (client == null) {
             target.writeln("not connected", ActionType.ERROR);
+            return;
         }
 
         channel = target.getTarget();

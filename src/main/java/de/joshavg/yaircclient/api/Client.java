@@ -4,6 +4,7 @@ import de.joshavg.yaircclient.api.listener.ApiListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Singleton;
 import java.io.*;
 import java.net.Socket;
 import java.nio.charset.Charset;
@@ -12,6 +13,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+@Singleton
 public class Client implements ApiListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(Client.class);
@@ -74,9 +76,9 @@ public class Client implements ApiListener {
     }
 
     private void handleServerResponse(String line) {
-        LOG.trace("incoming: " + line);
+        LOG.debug("incoming: " + line);
         Map<ResponseParser.Key, ResponseParser.ResponseValue> parsed = new ResponseParser(line).parse();
-        LOG.trace("parsed: " + parsed);
+        LOG.debug("parsed: " + parsed);
 
         if ("376".equals(parsed.get(ResponseParser.Key.CMD).get())) {
             listeners.forEach(l -> l.connected(this));
@@ -90,7 +92,7 @@ public class Client implements ApiListener {
     }
 
     public void write(String line) {
-        LOG.trace("outgoing: " + line);
+        LOG.debug("outgoing: " + line);
         if (writer == null) {
             throw new IllegalStateException("socket not yet writable");
         }

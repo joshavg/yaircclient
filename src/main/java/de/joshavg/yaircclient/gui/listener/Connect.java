@@ -7,17 +7,23 @@ import de.joshavg.yaircclient.gui.ActionType;
 import de.joshavg.yaircclient.gui.GuiListener;
 import de.joshavg.yaircclient.gui.MainForm;
 import de.joshavg.yaircclient.gui.OutputFactory;
+import javax.inject.Inject;
 
 public class Connect implements GuiListener {
 
-    private Client client;
+    private final Client client;
+    private final Settings settings;
+    private final OutputFactory outputFactory;
 
-    public Connect(Client client) {
+    @Inject
+    public Connect(Client client, Settings settings, OutputFactory outputFactory) {
         this.client = client;
+        this.settings = settings;
+        this.outputFactory = outputFactory;
     }
 
-    public static void connect(Client client) {
-        JsonObject cfg = Settings.read();
+    public static void connect(Client client, Settings settings) {
+        JsonObject cfg = settings.read();
 
         JsonObject cx = cfg.get("connection").asObject();
         String url = cx.getString("url", "empty_url");
@@ -34,9 +40,9 @@ public class Connect implements GuiListener {
         }
 
         if (!client.isConnected()) {
-            connect(client);
+            connect(client, settings);
         } else {
-            OutputFactory.getSystem().writeln("already connected", ActionType.ERROR);
+            outputFactory.getSystem().writeln("already connected", ActionType.ERROR);
         }
     }
 }

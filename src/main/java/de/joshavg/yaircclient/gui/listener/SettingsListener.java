@@ -10,12 +10,22 @@ import de.joshavg.yaircclient.gui.*;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.inject.Inject;
 
 public class SettingsListener implements GuiListener {
 
     private static final Pattern pattern = Pattern.compile("/s\\s?([a-z])?\\s?([^\\s]+)?\\s?([^\\s]+)?");
     private static final String SETTING_AUTOCONNECT = "autoconnect";
     private static final String SETTING_AUTOJOIN = "autojoin";
+
+    private final Settings settings;
+    private final OutputFactory outputFactory;
+
+    @Inject
+    public SettingsListener(Settings settings, OutputFactory outputFactory) {
+        this.settings = settings;
+        this.outputFactory = outputFactory;
+    }
 
     @Override
     public void messageTyped(String message, MainForm gui) {
@@ -47,16 +57,16 @@ public class SettingsListener implements GuiListener {
     }
 
     private void addChannel(String channel) {
-        JsonObject cfg = Settings.read();
+        JsonObject cfg = settings.read();
         JsonArray channels = cfg.get("channels").asArray();
 
         channels.add(channel);
 
-        Settings.write(cfg);
+        settings.write(cfg);
     }
 
     private void removeChannel(String channel) {
-        JsonObject cfg = Settings.read();
+        JsonObject cfg = settings.read();
         JsonArray channels = cfg.get("channels").asArray();
 
         int i = 0;
@@ -68,11 +78,11 @@ public class SettingsListener implements GuiListener {
             i++;
         }
 
-        Settings.write(cfg);
+        settings.write(cfg);
     }
 
     private void setSetting(String name, String value) {
-        JsonObject cfg = Settings.read();
+        JsonObject cfg = settings.read();
         JsonObject cx = cfg.get("connection").asObject();
 
         switch (name) {
@@ -92,19 +102,19 @@ public class SettingsListener implements GuiListener {
                 cfg.set(SETTING_AUTOJOIN, Boolean.valueOf(value));
                 break;
             default:
-                OutputFactory.getSystem().writeln("unknown setting " + name, ActionType.ERROR);
+                outputFactory.getSystem().writeln("unknown setting " + name, ActionType.ERROR);
         }
 
-        Settings.write(cfg);
+        settings.write(cfg);
     }
 
     private void displaySettings() {
-        OutputTarget target = OutputFactory.getSystem();
-        target.writeln(Settings.read().toString(WriterConfig.PRETTY_PRINT));
+        OutputTarget target = outputFactory.getSystem();
+        target.writeln(settings.read().toString(WriterConfig.PRETTY_PRINT));
     }
 
     private void listOrders() {
-        OutputTarget target = OutputFactory.getSystem();
+        OutputTarget target = outputFactory.getSystem();
         target.writeln("l: list settings    - /s l");
         target.writeln("d: display settings - /s d");
         target.writeln("s: set setting      - /s s [name] [value]");
@@ -113,10 +123,10 @@ public class SettingsListener implements GuiListener {
     }
 
     private void listSettings() {
-        JsonObject cfg = Settings.read();
+        JsonObject cfg = settings.read();
         JsonObject cx = cfg.get("connection").asObject();
 
-        OutputTarget target = OutputFactory.getSystem();
+        OutputTarget target = outputFactory.getSystem();
         target.writeln("url        : " + cx.get("url"));
         target.writeln("port       : " + cx.get("port"));
         target.writeln("nick       : " + cfg.get("nick"));

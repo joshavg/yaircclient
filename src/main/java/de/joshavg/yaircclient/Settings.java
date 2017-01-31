@@ -20,11 +20,7 @@ public class Settings {
         PATH = userHome + File.separator + ".config" + File.separator + "brabbel.json";
     }
 
-    private Settings() {
-        // no construction needed
-    }
-
-    private static JsonObject createDefaultCfg() {
+    private JsonObject createDefaultCfg() {
         JsonObject config = Json.parse("{}").asObject();
         JsonObject cx = Json.parse("{}").asObject();
         cx.set("url", "");
@@ -41,7 +37,7 @@ public class Settings {
         return config;
     }
 
-    static boolean createIfNotExists() {
+    boolean createIfNotExists() {
         if (new File(PATH).exists()) {
             return false;
         }
@@ -51,7 +47,7 @@ public class Settings {
         return true;
     }
 
-    public static JsonObject read() {
+    public JsonObject read() {
         try {
             FileReader fileReader = new FileReader(PATH);
             return Json.parse(fileReader).asObject();
@@ -63,7 +59,7 @@ public class Settings {
         return createDefaultCfg();
     }
 
-    public static synchronized void write(JsonValue value) {
+    public synchronized void write(JsonValue value) {
         try (FileWriter writer = new FileWriter(PATH)) {
             value.writeTo(writer, WriterConfig.PRETTY_PRINT);
         } catch (IOException e) {

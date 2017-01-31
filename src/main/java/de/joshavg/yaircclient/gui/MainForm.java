@@ -1,5 +1,7 @@
 package de.joshavg.yaircclient.gui;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-
+@Singleton
 public class MainForm extends JFrame {
 
     private static final String APPLICATION_TITLE = "brabbel";
@@ -37,11 +39,12 @@ public class MainForm extends JFrame {
 
     private transient TrayIcon trayIcon;
 
-    public MainForm() {
+    @Inject
+    public MainForm(OutputFactory outputFactory) {
         mainInput = new JTextField();
         indicator = new JLabel(APPLICATION_TITLE);
         listeners = new ArrayList<>();
-        currentTarget = OutputFactory.createSystem();
+        currentTarget = outputFactory.getSystem();
 
         readIndicator = new JLabel("!");
         readIndicator.setForeground(Color.RED);

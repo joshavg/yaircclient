@@ -6,12 +6,16 @@ import de.joshavg.yaircclient.gui.GuiListener;
 import de.joshavg.yaircclient.gui.MainForm;
 import de.joshavg.yaircclient.gui.OutputFactory;
 import de.joshavg.yaircclient.gui.OutputTarget;
+import javax.inject.Inject;
 
 public class JoinLeave implements GuiListener {
-    private Client client;
+    private final Client client;
+    private final OutputFactory outputFactory;
 
-    public JoinLeave(Client client) {
+    @Inject
+    public JoinLeave(Client client, OutputFactory outputFactory) {
         this.client = client;
+        this.outputFactory = outputFactory;
     }
 
     @Override
@@ -32,9 +36,9 @@ public class JoinLeave implements GuiListener {
         }
 
         client.write(Message.part(channel));
-        gui.setActiveTarget(OutputFactory.getSystem());
-        OutputFactory.remove(channel);
-        OutputFactory.getSystem().writeln("parted from " + channel);
+        gui.setActiveTarget(outputFactory.getSystem());
+        outputFactory.remove(channel);
+        outputFactory.getSystem().writeln("parted from " + channel);
     }
 
     private void joinChannel(MainForm gui, String channel) {
@@ -42,7 +46,7 @@ public class JoinLeave implements GuiListener {
             client.write(Message.join(channel));
         }
 
-        OutputTarget target = OutputFactory.getOrCreate(channel);
+        OutputTarget target = outputFactory.getOrCreate(channel);
         gui.setActiveTarget(target);
     }
 }

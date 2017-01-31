@@ -3,6 +3,7 @@ package de.joshavg.yaircclient.gui.listener;
 import de.joshavg.yaircclient.bridge.MessageReadStatus;
 import de.joshavg.yaircclient.gui.*;
 
+import javax.inject.Inject;
 import javax.swing.*;
 
 import java.util.List;
@@ -15,10 +16,13 @@ public class Windows implements GuiListener {
 
     private final MainForm form;
     private final MessageReadStatus readStatus;
+    private final OutputFactory outputFactory;
 
-    public Windows(MainForm form, MessageReadStatus readStatus) {
+    @Inject
+    public Windows(MainForm form, MessageReadStatus readStatus, OutputFactory outputFactory) {
         this.form = form;
         this.readStatus = readStatus;
+        this.outputFactory = outputFactory;
     }
 
     private boolean affectsMe(String text) {
@@ -54,7 +58,7 @@ public class Windows implements GuiListener {
         String[] split = text.split("\\s");
         if (split.length == 2) {
             String search = split[1];
-            List<String> outputs = OutputFactory
+            List<String> outputs = outputFactory
                     .getAll()
                     .keySet()
                     .stream()
@@ -69,17 +73,17 @@ public class Windows implements GuiListener {
     }
 
     private void removeWindow(String window) {
-        if (window.equals(OutputFactory.getSystem().getTarget())) {
+        if (window.equals(outputFactory.getSystem().getTarget())) {
             form.getCurrentTarget().writeln("cannot remove the system window", ERROR);
         } else if (window.equals(form.getCurrentTarget().getTarget())) {
             form.getCurrentTarget().writeln("cannot remove the current window", ERROR);
         } else {
-            OutputFactory.remove(window);
+            outputFactory.remove(window);
         }
     }
 
     private void setActiveWindow(String name) {
-        OutputTarget target = OutputFactory.get(name);
+        OutputTarget target = outputFactory.get(name);
         if (target != null) {
             form.setActiveTarget(target);
             target.jumpToEnd();
@@ -90,7 +94,7 @@ public class Windows implements GuiListener {
 
     private void listWindows() {
         OutputTarget currentTarget = form.getCurrentTarget();
-        OutputFactory.getAll().keySet().forEach(target -> {
+        outputFactory.getAll().keySet().forEach(target -> {
             boolean hasUnread = readStatus.readStatus(target);
             currentTarget.writeln(target + (hasUnread ? "!" : ""));
         });

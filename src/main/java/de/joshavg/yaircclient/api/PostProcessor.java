@@ -19,11 +19,21 @@ class PostProcessor {
         methods.put("JOIN", this::postProcessJoin);
         methods.put("PRIVMSG", this::postProcessPrivmsg);
         methods.put("PART", this::postProcessPart);
+        methods.put("353", this::postProcessNames);
+        methods.put("366", this::postProcessNamesEnd);
 
         String cmd = map.get(CMD).get();
         if (methods.containsKey(cmd)) {
             methods.get(cmd).run();
         }
+    }
+
+    private void postProcessNamesEnd() {
+        map.put(CHANNEL, map.get(META));
+    }
+
+    private void postProcessNames() {
+        map.put(CHANNEL, ResponseParser.ResponseValue.of(map.get(META).getValues()[1]));
     }
 
     private void postProcessPart() {

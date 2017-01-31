@@ -9,7 +9,7 @@ import javax.swing.*;
 public class MessageHistory implements GuiListener {
     private final RingBuffer<String> buffer;
 
-    public MessageHistory() {
+    MessageHistory() {
         buffer = new RingBuffer<>();
     }
 

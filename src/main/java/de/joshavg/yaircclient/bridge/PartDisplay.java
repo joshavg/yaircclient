@@ -9,14 +9,18 @@ import de.joshavg.yaircclient.gui.OutputFactory;
 import de.joshavg.yaircclient.gui.OutputTarget;
 
 import java.util.Map;
+import javax.inject.Inject;
 
 import static de.joshavg.yaircclient.api.ResponseParser.Key.*;
 
 public class PartDisplay implements ApiListener {
     private final MainForm form;
+    private final OutputFactory outputFactory;
 
-    public PartDisplay(MainForm form) {
+    @Inject
+    public PartDisplay(MainForm form, OutputFactory outputFactory) {
         this.form = form;
+        this.outputFactory = outputFactory;
     }
 
     @Override
@@ -44,7 +48,7 @@ public class PartDisplay implements ApiListener {
         String user = parsed.get(USER).get();
 
         String message = String.format("%s (%s) parted", nick, user);
-        OutputTarget target = OutputFactory.getOrCreate(channel);
+        OutputTarget target = outputFactory.getOrCreate(channel);
         target.writeln(message, ActionType.CHANNEL);
     }
 }

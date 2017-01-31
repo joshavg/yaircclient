@@ -6,16 +6,20 @@ import de.joshavg.yaircclient.bridge.MessageDisplay;
 import de.joshavg.yaircclient.gui.GuiListener;
 import de.joshavg.yaircclient.gui.MainForm;
 import de.joshavg.yaircclient.gui.OutputFactory;
+import javax.inject.Inject;
 
 import static de.joshavg.yaircclient.gui.ActionType.NOTICE;
 
 public class MessageSend implements GuiListener {
     private final Client client;
     private final MessageDisplay display;
+    private final OutputFactory outputFactory;
 
-    public MessageSend(Client client, MessageDisplay display) {
+    @Inject
+    public MessageSend(Client client, MessageDisplay display, OutputFactory outputFactory) {
         this.client = client;
         this.display = display;
+        this.outputFactory = outputFactory;
     }
 
     @Override
@@ -27,6 +31,6 @@ public class MessageSend implements GuiListener {
         String target = gui.getCurrentTarget().getTarget();
         client.write(Message.privmsg(target, message));
 
-        display.displayMessage(OutputFactory.getOrCreate(target), client.getNick(), message, NOTICE);
+        display.displayMessage(outputFactory.getOrCreate(target), client.getNick(), message, NOTICE);
     }
 }

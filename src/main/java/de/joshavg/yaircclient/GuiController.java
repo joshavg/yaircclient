@@ -2,56 +2,52 @@ package de.joshavg.yaircclient;
 
 import com.eclipsesource.json.JsonObject;
 import de.joshavg.yaircclient.api.Client;
-import de.joshavg.yaircclient.api.ClientFactory;
-import de.joshavg.yaircclient.bridge.*;
 import de.joshavg.yaircclient.gui.MainForm;
-import de.joshavg.yaircclient.gui.listener.MessageHistory;
 import de.joshavg.yaircclient.gui.listener.*;
+import javax.inject.Inject;
 
 class GuiController {
 
+    private final MainForm form;
     private final Client client;
-    private MainForm form;
 
-    GuiController() {
-        this.form = new MainForm();
-        this.client = ClientFactory.getClient();
+    @Inject
+    GuiController(MainForm form, Client client) {
+        this.form = form;
+        this.client = client;
     }
 
-    void start() {
-        MessageDisplay messageDisplay = new MessageDisplay(form);
-        MessageReadStatus messageReadStatus = new MessageReadStatus(form);
-        UsersDisplay usersDisplay = new UsersDisplay();
+    void start(Brabbel brabbel) {
+        form.addListener(brabbel.connect());
+        form.addListener(brabbel.settingsListener());
+        form.addListener(brabbel.exit());
+        form.addListener(brabbel.windows());
+        form.addListener(brabbel.joinLeave());
+        form.addListener(brabbel.messageSend());
+        form.addListener(brabbel.messageReadStatus());
+        form.addListener(brabbel.nickChange());
+        form.addListener(brabbel.messageHistory());
+        form.addListener(brabbel.usersDisplay());
+        form.addListener(brabbel.nickAutocomplete());
 
-        form.addListener(new Connect(client));
-        form.addListener(new SettingsListener());
-        form.addListener(new Exit(client));
-        form.addListener(new Windows(form, messageReadStatus));
-        form.addListener(new JoinLeave(client));
-        form.addListener(new MessageSend(client, messageDisplay));
-        form.addListener(messageReadStatus);
-        form.addListener(new NickChange(client));
-        form.addListener(new MessageHistory());
-        form.addListener(usersDisplay);
+        client.addListener(brabbel.apiLogger());
+        client.addListener(brabbel.messageDisplay());
+        client.addListener(brabbel.joinDisplay());
+        client.addListener(brabbel.partDisplay());
+        client.addListener(brabbel.messageReadStatus());
+        client.addListener(brabbel.usersDisplay());
 
-        client.addListener(new ApiLogger(form));
-        client.addListener(messageDisplay);
-        client.addListener(new JoinDisplay());
-        client.addListener(new PartDisplay(form));
-        client.addListener(messageReadStatus);
-        client.addListener(usersDisplay);
-
-        JsonObject cfg = Settings.read();
+        JsonObject cfg = brabbel.settings().read();
         boolean autojoin = cfg.getBoolean("autojoin", false);
         if (autojoin) {
-            client.addListener(new AutoJoin());
+            client.addListener(brabbel.autoJoin());
         }
 
         form.setVisible(true);
 
         boolean autoconnect = cfg.getBoolean("autoconnect", false);
         if (autoconnect) {
-            Connect.connect(client);
+            Connect.connect(brabbel.client(), brabbel.settings());
         }
     }
 }

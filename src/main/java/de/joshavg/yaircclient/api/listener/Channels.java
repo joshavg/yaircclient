@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+@Deprecated
 public class Channels implements ApiListener {
 
     private Set<String> openChannels = new HashSet<>();

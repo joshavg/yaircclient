@@ -4,8 +4,10 @@ import de.joshavg.yaircclient.api.Client;
 import de.joshavg.yaircclient.api.Message;
 import de.joshavg.yaircclient.api.ResponseParser;
 
+import javax.inject.Singleton;
 import java.util.Map;
 
+@Singleton
 public class Renamer implements ApiListener {
 
     private int tries;
