@@ -6,7 +6,7 @@
 
     <groupId>de.joshavg</groupId>
     <artifactId>yaircclient</artifactId>
-    <version>0.5.1-SNAPSHOT</version>
+    <version>0.6-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <url>https://github.com/joshavg/yaircclient</url>
