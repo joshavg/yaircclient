@@ -1,5 +1,11 @@
 package de.joshavg.yaircclient.bridge;
 
+import static de.joshavg.yaircclient.api.ResponseParser.Key.CHANNEL;
+import static de.joshavg.yaircclient.api.ResponseParser.Key.CMD;
+import static de.joshavg.yaircclient.api.ResponseParser.Key.NICK;
+import static de.joshavg.yaircclient.api.ResponseParser.Key.PAYLOAD;
+import static de.joshavg.yaircclient.api.ResponseParser.Key.USER;
+
 import de.joshavg.yaircclient.api.Client;
 import de.joshavg.yaircclient.api.ResponseParser;
 import de.joshavg.yaircclient.api.listener.ApiListener;
@@ -7,20 +13,23 @@ import de.joshavg.yaircclient.gui.ActionType;
 import de.joshavg.yaircclient.gui.MainForm;
 import de.joshavg.yaircclient.gui.OutputFactory;
 import de.joshavg.yaircclient.gui.OutputTarget;
-
 import java.util.Map;
-
-import static de.joshavg.yaircclient.api.ResponseParser.Key.*;
+import javax.inject.Inject;
 
 public class PartDisplay implements ApiListener {
-    private final MainForm form;
 
-    public PartDisplay(MainForm form) {
+    private final MainForm form;
+    private final OutputFactory outputFactory;
+
+    @Inject
+    public PartDisplay(MainForm form, OutputFactory outputFactory) {
         this.form = form;
+        this.outputFactory = outputFactory;
     }
 
     @Override
-    public void parsed(Map<ResponseParser.Key, ResponseParser.ResponseValue> parsed, Client client) {
+    public void parsed(Map<ResponseParser.Key, ResponseParser.ResponseValue> parsed,
+        Client client) {
         String command = parsed.get(CMD).get();
         if ("PART".equals(command)) {
             handlePart(parsed);
@@ -44,7 +53,7 @@ public class PartDisplay implements ApiListener {
         String user = parsed.get(USER).get();
 
         String message = String.format("%s (%s) parted", nick, user);
-        OutputTarget target = OutputFactory.getOrCreate(channel);
+        OutputTarget target = outputFactory.getOrCreate(channel);
         target.writeln(message, ActionType.CHANNEL);
     }
 }

@@ -1,32 +1,31 @@
 package de.joshavg.yaircclient.api;
 
 import de.joshavg.yaircclient.api.listener.ApiListener;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import javax.inject.Singleton;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+@Singleton
 public class Client implements ApiListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(Client.class);
-
-    private String nick;
-
-    private Set<ApiListener> listeners;
-
-    private Socket socket;
-
-    private BufferedWriter writer;
-
-    private boolean isConnected;
-
     private final Charset utf8Charset;
+    private String nick;
+    private Set<ApiListener> listeners;
+    private Socket socket;
+    private BufferedWriter writer;
+    private boolean isConnected;
 
     Client() {
         listeners = new HashSet<>();
@@ -48,8 +47,10 @@ public class Client implements ApiListener {
                 socket = new Socket(host, port);
                 socket.setKeepAlive(true);
 
-                BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), utf8Charset));
-                writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), utf8Charset));
+                BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(socket.getInputStream(), utf8Charset));
+                writer = new BufferedWriter(
+                    new OutputStreamWriter(socket.getOutputStream(), utf8Charset));
 
                 publishIdent(nick);
                 handleSocketLifecycle(reader);
@@ -74,9 +75,10 @@ public class Client implements ApiListener {
     }
 
     private void handleServerResponse(String line) {
-        LOG.trace("incoming: " + line);
-        Map<ResponseParser.Key, ResponseParser.ResponseValue> parsed = new ResponseParser(line).parse();
-        LOG.trace("parsed: " + parsed);
+        LOG.debug("incoming: {}", line);
+        Map<ResponseParser.Key, ResponseParser.ResponseValue> parsed = new ResponseParser(line)
+            .parse();
+        LOG.debug("parsed: {}", parsed);
 
         if ("376".equals(parsed.get(ResponseParser.Key.CMD).get())) {
             listeners.forEach(l -> l.connected(this));
@@ -90,7 +92,7 @@ public class Client implements ApiListener {
     }
 
     public void write(String line) {
-        LOG.trace("outgoing: " + line);
+        LOG.debug("outgoing: {}", line);
         if (writer == null) {
             throw new IllegalStateException("socket not yet writable");
         }
@@ -104,7 +106,8 @@ public class Client implements ApiListener {
     }
 
     @Override
-    public void parsed(Map<ResponseParser.Key, ResponseParser.ResponseValue> parsed, Client client) {
+    public void parsed(Map<ResponseParser.Key, ResponseParser.ResponseValue> parsed,
+        Client client) {
         if ("PING".equals(parsed.get(ResponseParser.Key.CMD).get())) {
             write("PONG " + parsed.get(ResponseParser.Key.PAYLOAD));
         }

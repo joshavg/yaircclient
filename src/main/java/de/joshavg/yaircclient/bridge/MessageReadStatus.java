@@ -6,22 +6,27 @@ import de.joshavg.yaircclient.api.listener.ApiListener;
 import de.joshavg.yaircclient.gui.GuiListener;
 import de.joshavg.yaircclient.gui.MainForm;
 import de.joshavg.yaircclient.gui.OutputTarget;
-
 import java.util.HashMap;
 import java.util.Map;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
+@Singleton
 public class MessageReadStatus implements ApiListener, GuiListener {
+
     private final MainForm form;
 
     private final Map<String, Boolean> unreadMessages;
 
+    @Inject
     public MessageReadStatus(MainForm form) {
         this.form = form;
         unreadMessages = new HashMap<>();
     }
 
     @Override
-    public void parsed(Map<ResponseParser.Key, ResponseParser.ResponseValue> parsed, Client client) {
+    public void parsed(Map<ResponseParser.Key, ResponseParser.ResponseValue> parsed,
+        Client client) {
         if (!"PRIVMSG".equals(parsed.get(ResponseParser.Key.CMD).get())) {
             return;
         }

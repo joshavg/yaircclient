@@ -1,16 +1,19 @@
 package de.joshavg.yaircclient.gui;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static de.joshavg.yaircclient.gui.ActionType.CHANNEL;
+import static de.joshavg.yaircclient.gui.ActionType.HIGHLIGHT;
+import static de.joshavg.yaircclient.gui.ActionType.MESSAGE;
+import static de.joshavg.yaircclient.gui.ActionType.NOTICE;
 
-import javax.swing.*;
+import java.awt.Color;
+import java.awt.Font;
+import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
-import java.awt.*;
-
-import static de.joshavg.yaircclient.gui.ActionType.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class OutputTarget extends JTextPane {
 

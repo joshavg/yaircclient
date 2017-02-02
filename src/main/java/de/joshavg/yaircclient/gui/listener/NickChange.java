@@ -4,10 +4,13 @@ import de.joshavg.yaircclient.api.Client;
 import de.joshavg.yaircclient.api.Message;
 import de.joshavg.yaircclient.gui.GuiListener;
 import de.joshavg.yaircclient.gui.MainForm;
+import javax.inject.Inject;
 
 public class NickChange implements GuiListener {
+
     private final Client client;
 
+    @Inject
     public NickChange(Client client) {
         this.client = client;
     }

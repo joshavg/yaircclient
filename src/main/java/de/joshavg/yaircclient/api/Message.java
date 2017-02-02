@@ -25,4 +25,8 @@ public class Message {
         return String.format("PRIVMSG %s :%s", target, payload);
     }
 
+    public static String names(String c) {
+        return "NAMES " + c;
+    }
+
 }

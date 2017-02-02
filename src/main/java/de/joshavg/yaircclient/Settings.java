@@ -1,13 +1,16 @@
 package de.joshavg.yaircclient;
 
-import com.eclipsesource.json.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import com.eclipsesource.json.Json;
+import com.eclipsesource.json.JsonArray;
+import com.eclipsesource.json.JsonObject;
+import com.eclipsesource.json.JsonValue;
+import com.eclipsesource.json.WriterConfig;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Settings {
 
@@ -20,11 +23,7 @@ public class Settings {
         PATH = userHome + File.separator + ".config" + File.separator + "brabbel.json";
     }
 
-    private Settings() {
-        // no construction needed
-    }
-
-    private static JsonObject createDefaultCfg() {
+    private JsonObject createDefaultCfg() {
         JsonObject config = Json.parse("{}").asObject();
         JsonObject cx = Json.parse("{}").asObject();
         cx.set("url", "");
@@ -41,7 +40,7 @@ public class Settings {
         return config;
     }
 
-    static boolean createIfNotExists() {
+    boolean createIfNotExists() {
         if (new File(PATH).exists()) {
             return false;
         }
@@ -51,19 +50,21 @@ public class Settings {
         return true;
     }
 
-    public static JsonObject read() {
+    public JsonObject read() {
         try {
             FileReader fileReader = new FileReader(PATH);
             return Json.parse(fileReader).asObject();
         } catch (IOException e) {
-            LOG.error("could not read settings file. this is either, because you started the application the first" +
+            LOG.error(
+                "could not read settings file. this is either, because you started the application the first"
+                    +
                     " time or your file system is not properly configured", e);
         }
 
         return createDefaultCfg();
     }
 
-    public static synchronized void write(JsonValue value) {
+    public synchronized void write(JsonValue value) {
         try (FileWriter writer = new FileWriter(PATH)) {
             value.writeTo(writer, WriterConfig.PRETTY_PRINT);
         } catch (IOException e) {

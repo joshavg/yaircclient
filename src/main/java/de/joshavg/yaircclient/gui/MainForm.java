@@ -1,11 +1,14 @@
 package de.joshavg.yaircclient.gui;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.*;
+import java.awt.AWTException;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.Font;
+import java.awt.Image;
+import java.awt.KeyboardFocusManager;
+import java.awt.SystemTray;
+import java.awt.TrayIcon;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
@@ -15,8 +18,22 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import javax.imageio.ImageIO;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTextField;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.WindowConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-
+@Singleton
 public class MainForm extends JFrame {
 
     private static final String APPLICATION_TITLE = "brabbel";
@@ -37,11 +54,12 @@ public class MainForm extends JFrame {
 
     private transient TrayIcon trayIcon;
 
-    public MainForm() {
+    @Inject
+    public MainForm(OutputFactory outputFactory) {
         mainInput = new JTextField();
         indicator = new JLabel(APPLICATION_TITLE);
         listeners = new ArrayList<>();
-        currentTarget = OutputFactory.createSystem();
+        currentTarget = outputFactory.getSystem();
 
         readIndicator = new JLabel("!");
         readIndicator.setForeground(Color.RED);
@@ -134,7 +152,7 @@ public class MainForm extends JFrame {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-                | UnsupportedLookAndFeelException e) {
+            | UnsupportedLookAndFeelException e) {
             LOG.warn("could not set look and feel", e);
         }
 
@@ -154,7 +172,8 @@ public class MainForm extends JFrame {
         mainInput.setForeground(Color.LIGHT_GRAY);
         mainInput.setCaretColor(Color.LIGHT_GRAY);
         mainInput.setBackground(Color.BLACK);
-        mainInput.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, Collections.emptySet());
+        mainInput.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS,
+            Collections.emptySet());
 
         JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, inputPanel, sspMainOutput);
 

@@ -1,16 +1,27 @@
 package de.joshavg.yaircclient.api;
 
-import de.joshavg.yaircclient.api.listener.Listeners;
+import dagger.Module;
+import dagger.Provides;
+import de.joshavg.yaircclient.api.listener.UsersCollector;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
+@Module
 public class ClientFactory {
 
-    private ClientFactory() {
+    @Provides
+    @Singleton
+    Client provideClient() {
+        return new Client();
     }
 
-    public static Client getClient() {
-        Client client = new Client();
-        Listeners.addStandardListeners(client);
-        return client;
+    @Provides
+    @Singleton
+    @Inject
+    UsersCollector provideUsersCollector(Client client) {
+        UsersCollector collector = new UsersCollector(client);
+        client.addListener(collector);
+        return collector;
     }
 
 }

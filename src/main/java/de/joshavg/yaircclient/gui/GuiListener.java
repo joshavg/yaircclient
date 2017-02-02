@@ -1,6 +1,6 @@
 package de.joshavg.yaircclient.gui;
 
-import javax.swing.*;
+import javax.swing.JTextField;
 
 public interface GuiListener {
 
