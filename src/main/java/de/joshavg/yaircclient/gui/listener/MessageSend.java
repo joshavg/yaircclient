@@ -1,5 +1,7 @@
 package de.joshavg.yaircclient.gui.listener;
 
+import static de.joshavg.yaircclient.gui.ActionType.NOTICE;
+
 import de.joshavg.yaircclient.api.Client;
 import de.joshavg.yaircclient.api.Message;
 import de.joshavg.yaircclient.bridge.MessageDisplay;
@@ -8,9 +10,8 @@ import de.joshavg.yaircclient.gui.MainForm;
 import de.joshavg.yaircclient.gui.OutputFactory;
 import javax.inject.Inject;
 
-import static de.joshavg.yaircclient.gui.ActionType.NOTICE;
-
 public class MessageSend implements GuiListener {
+
     private final Client client;
     private final MessageDisplay display;
     private final OutputFactory outputFactory;
@@ -31,6 +32,7 @@ public class MessageSend implements GuiListener {
         String target = gui.getCurrentTarget().getTarget();
         client.write(Message.privmsg(target, message));
 
-        display.displayMessage(outputFactory.getOrCreate(target), client.getNick(), message, NOTICE);
+        display
+            .displayMessage(outputFactory.getOrCreate(target), client.getNick(), message, NOTICE);
     }
 }

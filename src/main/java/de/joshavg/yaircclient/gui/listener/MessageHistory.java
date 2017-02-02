@@ -3,10 +3,10 @@ package de.joshavg.yaircclient.gui.listener;
 import de.joshavg.yaircclient.RingBuffer;
 import de.joshavg.yaircclient.gui.GuiListener;
 import de.joshavg.yaircclient.gui.MainForm;
-
-import javax.swing.*;
+import javax.swing.JTextField;
 
 public class MessageHistory implements GuiListener {
+
     private final RingBuffer<String> buffer;
 
     MessageHistory() {

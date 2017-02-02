@@ -9,6 +9,7 @@ import de.joshavg.yaircclient.gui.OutputTarget;
 import javax.inject.Inject;
 
 public class JoinLeave implements GuiListener {
+
     private final Client client;
     private final OutputFactory outputFactory;
 

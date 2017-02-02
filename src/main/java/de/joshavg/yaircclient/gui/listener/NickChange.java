@@ -7,6 +7,7 @@ import de.joshavg.yaircclient.gui.MainForm;
 import javax.inject.Inject;
 
 public class NickChange implements GuiListener {
+
     private final Client client;
 
     @Inject

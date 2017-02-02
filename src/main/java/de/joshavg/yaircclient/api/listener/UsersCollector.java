@@ -3,8 +3,13 @@ package de.joshavg.yaircclient.api.listener;
 import de.joshavg.yaircclient.api.Client;
 import de.joshavg.yaircclient.api.Message;
 import de.joshavg.yaircclient.api.ResponseParser;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Consumer;
 
 public class UsersCollector implements ApiListener {
@@ -21,7 +26,8 @@ public class UsersCollector implements ApiListener {
     }
 
     @Override
-    public void parsed(Map<ResponseParser.Key, ResponseParser.ResponseValue> parsed, Client client) {
+    public void parsed(Map<ResponseParser.Key, ResponseParser.ResponseValue> parsed,
+        Client client) {
         String cmd = parsed.get(ResponseParser.Key.CMD).get();
 
         if ("353".equals(cmd)) {
@@ -32,9 +38,10 @@ public class UsersCollector implements ApiListener {
         }
     }
 
-    private String notifyQueuedConsumers(Map<ResponseParser.Key, ResponseParser.ResponseValue> parsed) {
+    private String notifyQueuedConsumers(
+        Map<ResponseParser.Key, ResponseParser.ResponseValue> parsed) {
         String channel = parsed.get(ResponseParser.Key.CHANNEL).get();
-        if(queue.containsKey(channel)) {
+        if (queue.containsKey(channel)) {
             queue.get(channel).forEach(c -> c.accept(buffer.get(channel)));
         }
         return channel;

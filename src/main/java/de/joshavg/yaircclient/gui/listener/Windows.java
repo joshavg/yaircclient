@@ -1,16 +1,17 @@
 package de.joshavg.yaircclient.gui.listener;
 
-import de.joshavg.yaircclient.bridge.MessageReadStatus;
-import de.joshavg.yaircclient.gui.*;
-
-import javax.inject.Inject;
-import javax.swing.*;
-
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import static de.joshavg.yaircclient.gui.ActionType.ERROR;
+
+import de.joshavg.yaircclient.bridge.MessageReadStatus;
+import de.joshavg.yaircclient.gui.ActionType;
+import de.joshavg.yaircclient.gui.GuiListener;
+import de.joshavg.yaircclient.gui.MainForm;
+import de.joshavg.yaircclient.gui.OutputFactory;
+import de.joshavg.yaircclient.gui.OutputTarget;
+import java.util.List;
+import java.util.stream.Collectors;
+import javax.inject.Inject;
+import javax.swing.JTextField;
 
 public class Windows implements GuiListener {
 
@@ -59,11 +60,11 @@ public class Windows implements GuiListener {
         if (split.length == 2) {
             String search = split[1];
             List<String> outputs = outputFactory
-                    .getAll()
-                    .keySet()
-                    .stream()
-                    .filter(on -> on.startsWith(search))
-                    .collect(Collectors.toList());
+                .getAll()
+                .keySet()
+                .stream()
+                .filter(on -> on.startsWith(search))
+                .collect(Collectors.toList());
             if (outputs.size() == 1) {
                 field.setText("/w " + outputs.get(0));
             } else {

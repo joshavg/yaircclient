@@ -4,12 +4,11 @@ import de.joshavg.yaircclient.api.listener.UsersCollector;
 import de.joshavg.yaircclient.gui.GuiListener;
 import de.joshavg.yaircclient.gui.MainForm;
 import de.joshavg.yaircclient.gui.OutputTarget;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
-import javax.swing.*;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+import javax.swing.JTextField;
 
 @Singleton
 public class NickAutocomplete implements GuiListener {
@@ -35,7 +34,8 @@ public class NickAutocomplete implements GuiListener {
             String[] parts = text.split("\\s");
             String search = parts[parts.length - 1];
 
-            List<String> users = us.stream().filter(u -> u.startsWith(search)).collect(Collectors.toList());
+            List<String> users = us.stream().filter(u -> u.startsWith(search))
+                .collect(Collectors.toList());
             if (users.size() == 1) {
                 String user = users.get(0);
                 user = user.replaceFirst("[~&@%\\+]", "");

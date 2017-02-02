@@ -22,7 +22,7 @@ public class Connect implements GuiListener {
         this.outputFactory = outputFactory;
     }
 
-    public static void connect(Client client, Settings settings) {
+    public void connect() {
         JsonObject cfg = settings.read();
 
         JsonObject cx = cfg.get("connection").asObject();
@@ -40,7 +40,7 @@ public class Connect implements GuiListener {
         }
 
         if (!client.isConnected()) {
-            connect(client, settings);
+            connect();
         } else {
             outputFactory.getSystem().writeln("already connected", ActionType.ERROR);
         }

@@ -4,8 +4,11 @@ import de.joshavg.yaircclient.api.Client;
 import de.joshavg.yaircclient.api.Message;
 import de.joshavg.yaircclient.api.ResponseParser;
 import de.joshavg.yaircclient.api.listener.ApiListener;
-import de.joshavg.yaircclient.gui.*;
-
+import de.joshavg.yaircclient.gui.ActionType;
+import de.joshavg.yaircclient.gui.GuiListener;
+import de.joshavg.yaircclient.gui.MainForm;
+import de.joshavg.yaircclient.gui.OutputFactory;
+import de.joshavg.yaircclient.gui.OutputTarget;
 import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -24,7 +27,8 @@ public class UsersDisplay implements ApiListener, GuiListener {
     }
 
     @Override
-    public void parsed(Map<ResponseParser.Key, ResponseParser.ResponseValue> parsed, Client client) {
+    public void parsed(Map<ResponseParser.Key, ResponseParser.ResponseValue> parsed,
+        Client client) {
         String cmd = parsed.get(ResponseParser.Key.CMD).get();
         String[] meta = parsed.get(ResponseParser.Key.META).getValues();
 
@@ -33,8 +37,9 @@ public class UsersDisplay implements ApiListener, GuiListener {
         }
 
         if ("353".equals(cmd)) {
-            outputFactory.get(channel).writeln(parsed.get(ResponseParser.Key.PAYLOAD).get(), ActionType.NOTICE);
-        } else if("366".equals(cmd)) {
+            outputFactory.get(channel)
+                .writeln(parsed.get(ResponseParser.Key.PAYLOAD).get(), ActionType.NOTICE);
+        } else if ("366".equals(cmd)) {
             channel = "";
         }
     }

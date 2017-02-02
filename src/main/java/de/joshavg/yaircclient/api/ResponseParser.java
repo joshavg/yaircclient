@@ -1,13 +1,12 @@
 package de.joshavg.yaircclient.api;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ResponseParser {
 
@@ -71,7 +70,8 @@ public class ResponseParser {
         }
 
         if (headerSplit.length > 3) {
-            int metaLength = headerSplit[0].length() + headerSplit[1].length() + headerSplit[2].length() + 3;
+            int metaLength =
+                headerSplit[0].length() + headerSplit[1].length() + headerSplit[2].length() + 3;
             String meta = header.substring(metaLength);
             map.put(Key.META, ResponseValue.of(meta));
         }
@@ -97,6 +97,7 @@ public class ResponseParser {
     }
 
     public static class ResponseValue {
+
         private final String value;
 
         ResponseValue(String value) {

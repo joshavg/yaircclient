@@ -2,7 +2,6 @@ package de.joshavg.yaircclient.api.listener;
 
 import dagger.Module;
 import dagger.Provides;
-
 import javax.inject.Singleton;
 
 @Module

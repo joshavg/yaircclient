@@ -1,5 +1,8 @@
 package de.joshavg.yaircclient.bridge;
 
+import static de.joshavg.yaircclient.gui.ActionType.HIGHLIGHT;
+import static de.joshavg.yaircclient.gui.ActionType.MESSAGE;
+
 import de.joshavg.yaircclient.api.Client;
 import de.joshavg.yaircclient.api.ResponseParser;
 import de.joshavg.yaircclient.api.listener.ApiListener;
@@ -7,18 +10,16 @@ import de.joshavg.yaircclient.gui.ActionType;
 import de.joshavg.yaircclient.gui.MainForm;
 import de.joshavg.yaircclient.gui.OutputFactory;
 import de.joshavg.yaircclient.gui.OutputTarget;
-
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 import javax.inject.Inject;
 
-import static de.joshavg.yaircclient.gui.ActionType.HIGHLIGHT;
-import static de.joshavg.yaircclient.gui.ActionType.MESSAGE;
-
 public class MessageDisplay implements ApiListener {
-    private static final DateFormat DATE_FORMAT = DateFormat.getTimeInstance(DateFormat.DEFAULT, Locale.getDefault());
+
+    private static final DateFormat DATE_FORMAT = DateFormat
+        .getTimeInstance(DateFormat.DEFAULT, Locale.getDefault());
 
     private final MainForm form;
     private final OutputFactory outputFactory;
@@ -30,7 +31,8 @@ public class MessageDisplay implements ApiListener {
     }
 
     @Override
-    public void parsed(Map<ResponseParser.Key, ResponseParser.ResponseValue> parsed, Client client) {
+    public void parsed(Map<ResponseParser.Key, ResponseParser.ResponseValue> parsed,
+        Client client) {
         if (!"PRIVMSG".equals(parsed.get(ResponseParser.Key.CMD).get())) {
             return;
         }
@@ -64,9 +66,10 @@ public class MessageDisplay implements ApiListener {
         return false;
     }
 
-    public void displayMessage(OutputTarget target, String sender, String message, ActionType type) {
+    public void displayMessage(OutputTarget target, String sender, String message,
+        ActionType type) {
         String line = String.format("%s - %s: %s",
-                DATE_FORMAT.format(new Date()), sender, message);
+            DATE_FORMAT.format(new Date()), sender, message);
 
         target.writeln(line, type);
     }

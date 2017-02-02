@@ -2,11 +2,19 @@ package de.joshavg.yaircclient;
 
 import com.eclipsesource.json.JsonObject;
 import de.joshavg.yaircclient.api.Client;
+import de.joshavg.yaircclient.api.listener.ApiListener;
+import de.joshavg.yaircclient.gui.GuiListener;
 import de.joshavg.yaircclient.gui.MainForm;
-import de.joshavg.yaircclient.gui.listener.*;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Objects;
 import javax.inject.Inject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 class GuiController {
+
+    private static final Logger LOG = LoggerFactory.getLogger(GuiController.class);
 
     private final MainForm form;
     private final Client client;
@@ -18,24 +26,10 @@ class GuiController {
     }
 
     void start(Brabbel brabbel) {
-        form.addListener(brabbel.connect());
-        form.addListener(brabbel.settingsListener());
-        form.addListener(brabbel.exit());
-        form.addListener(brabbel.windows());
-        form.addListener(brabbel.joinLeave());
-        form.addListener(brabbel.messageSend());
-        form.addListener(brabbel.messageReadStatus());
-        form.addListener(brabbel.nickChange());
-        form.addListener(brabbel.messageHistory());
-        form.addListener(brabbel.usersDisplay());
-        form.addListener(brabbel.nickAutocomplete());
+        Method[] methods = brabbel.getClass().getMethods();
 
-        client.addListener(brabbel.apiLogger());
-        client.addListener(brabbel.messageDisplay());
-        client.addListener(brabbel.joinDisplay());
-        client.addListener(brabbel.partDisplay());
-        client.addListener(brabbel.messageReadStatus());
-        client.addListener(brabbel.usersDisplay());
+        addGuiListeners(brabbel, methods);
+        addApiListeners(brabbel, methods);
 
         JsonObject cfg = brabbel.settings().read();
         boolean autojoin = cfg.getBoolean("autojoin", false);
@@ -47,7 +41,37 @@ class GuiController {
 
         boolean autoconnect = cfg.getBoolean("autoconnect", false);
         if (autoconnect) {
-            Connect.connect(brabbel.client(), brabbel.settings());
+            brabbel.connect().connect();
         }
+    }
+
+    private void addApiListeners(Brabbel brabbel, Method[] methods) {
+        Arrays.stream(methods)
+            .filter(m -> m.getReturnType() == ApiListener.class)
+            .map(m -> {
+                try {
+                    return (ApiListener) m.invoke(brabbel);
+                } catch (ReflectiveOperationException e) {
+                    LOG.error("error instantiating listener", e);
+                }
+                return null;
+            })
+            .filter(Objects::nonNull)
+            .forEach(client::addListener);
+    }
+
+    private void addGuiListeners(Brabbel brabbel, Method[] methods) {
+        Arrays.stream(methods)
+            .filter(m -> m.getReturnType() == GuiListener.class)
+            .map(m -> {
+                try {
+                    return (GuiListener) m.invoke(brabbel);
+                } catch (ReflectiveOperationException e) {
+                    LOG.error("error instantiating listener", e);
+                }
+                return null;
+            })
+            .filter(Objects::nonNull)
+            .forEach(form::addListener);
     }
 }

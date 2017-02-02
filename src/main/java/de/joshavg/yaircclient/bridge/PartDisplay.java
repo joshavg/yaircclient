@@ -1,5 +1,11 @@
 package de.joshavg.yaircclient.bridge;
 
+import static de.joshavg.yaircclient.api.ResponseParser.Key.CHANNEL;
+import static de.joshavg.yaircclient.api.ResponseParser.Key.CMD;
+import static de.joshavg.yaircclient.api.ResponseParser.Key.NICK;
+import static de.joshavg.yaircclient.api.ResponseParser.Key.PAYLOAD;
+import static de.joshavg.yaircclient.api.ResponseParser.Key.USER;
+
 import de.joshavg.yaircclient.api.Client;
 import de.joshavg.yaircclient.api.ResponseParser;
 import de.joshavg.yaircclient.api.listener.ApiListener;
@@ -7,13 +13,11 @@ import de.joshavg.yaircclient.gui.ActionType;
 import de.joshavg.yaircclient.gui.MainForm;
 import de.joshavg.yaircclient.gui.OutputFactory;
 import de.joshavg.yaircclient.gui.OutputTarget;
-
 import java.util.Map;
 import javax.inject.Inject;
 
-import static de.joshavg.yaircclient.api.ResponseParser.Key.*;
-
 public class PartDisplay implements ApiListener {
+
     private final MainForm form;
     private final OutputFactory outputFactory;
 
@@ -24,7 +28,8 @@ public class PartDisplay implements ApiListener {
     }
 
     @Override
-    public void parsed(Map<ResponseParser.Key, ResponseParser.ResponseValue> parsed, Client client) {
+    public void parsed(Map<ResponseParser.Key, ResponseParser.ResponseValue> parsed,
+        Client client) {
         String command = parsed.get(CMD).get();
         if ("PART".equals(command)) {
             handlePart(parsed);

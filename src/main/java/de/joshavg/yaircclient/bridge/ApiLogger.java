@@ -7,11 +7,11 @@ import de.joshavg.yaircclient.gui.ActionType;
 import de.joshavg.yaircclient.gui.MainForm;
 import de.joshavg.yaircclient.gui.OutputFactory;
 import de.joshavg.yaircclient.gui.OutputTarget;
-
 import java.util.Map;
 import javax.inject.Inject;
 
 public class ApiLogger implements ApiListener {
+
     private final MainForm form;
     private final OutputFactory outputFactory;
 
@@ -22,12 +22,13 @@ public class ApiLogger implements ApiListener {
     }
 
     @Override
-    public void parsed(Map<ResponseParser.Key, ResponseParser.ResponseValue> parsed, Client client) {
+    public void parsed(Map<ResponseParser.Key, ResponseParser.ResponseValue> parsed,
+        Client client) {
         OutputTarget target = outputFactory.getSystem();
 
         String message = String.format("%1s: %2s",
-                parsed.get(ResponseParser.Key.CMD),
-                parsed.get(ResponseParser.Key.PAYLOAD));
+            parsed.get(ResponseParser.Key.CMD),
+            parsed.get(ResponseParser.Key.PAYLOAD));
         target.writeln(message, ActionType.NOTICE);
 
         if ("NICK".equals(parsed.get(ResponseParser.Key.CMD).get())) {

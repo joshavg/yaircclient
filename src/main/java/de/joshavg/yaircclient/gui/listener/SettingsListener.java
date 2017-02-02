@@ -5,8 +5,11 @@ import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.JsonValue;
 import com.eclipsesource.json.WriterConfig;
 import de.joshavg.yaircclient.Settings;
-import de.joshavg.yaircclient.gui.*;
-
+import de.joshavg.yaircclient.gui.ActionType;
+import de.joshavg.yaircclient.gui.GuiListener;
+import de.joshavg.yaircclient.gui.MainForm;
+import de.joshavg.yaircclient.gui.OutputFactory;
+import de.joshavg.yaircclient.gui.OutputTarget;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -14,7 +17,8 @@ import javax.inject.Inject;
 
 public class SettingsListener implements GuiListener {
 
-    private static final Pattern pattern = Pattern.compile("/s\\s?([a-z])?\\s?([^\\s]+)?\\s?([^\\s]+)?");
+    private static final Pattern pattern = Pattern
+        .compile("/s\\s?([a-z])?\\s?([^\\s]+)?\\s?([^\\s]+)?");
     private static final String SETTING_AUTOCONNECT = "autoconnect";
     private static final String SETTING_AUTOJOIN = "autojoin";
 

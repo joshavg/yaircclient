@@ -6,11 +6,11 @@ import de.joshavg.yaircclient.api.listener.ApiListener;
 import de.joshavg.yaircclient.gui.ActionType;
 import de.joshavg.yaircclient.gui.OutputFactory;
 import de.joshavg.yaircclient.gui.OutputTarget;
-
 import java.util.Map;
 import javax.inject.Inject;
 
 public class JoinDisplay implements ApiListener {
+
     private final OutputFactory outputFactory;
 
     @Inject
@@ -19,7 +19,8 @@ public class JoinDisplay implements ApiListener {
     }
 
     @Override
-    public void parsed(Map<ResponseParser.Key, ResponseParser.ResponseValue> parsed, Client client) {
+    public void parsed(Map<ResponseParser.Key, ResponseParser.ResponseValue> parsed,
+        Client client) {
         String command = parsed.get(ResponseParser.Key.CMD).get();
         if (!"JOIN".equals(command)) {
             return;

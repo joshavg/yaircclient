@@ -1,13 +1,16 @@
 package de.joshavg.yaircclient;
 
-import com.eclipsesource.json.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import com.eclipsesource.json.Json;
+import com.eclipsesource.json.JsonArray;
+import com.eclipsesource.json.JsonObject;
+import com.eclipsesource.json.JsonValue;
+import com.eclipsesource.json.WriterConfig;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Settings {
 
@@ -52,7 +55,9 @@ public class Settings {
             FileReader fileReader = new FileReader(PATH);
             return Json.parse(fileReader).asObject();
         } catch (IOException e) {
-            LOG.error("could not read settings file. this is either, because you started the application the first" +
+            LOG.error(
+                "could not read settings file. this is either, because you started the application the first"
+                    +
                     " time or your file system is not properly configured", e);
         }
 

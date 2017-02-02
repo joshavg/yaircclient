@@ -1,9 +1,15 @@
 package de.joshavg.yaircclient.api;
 
+import static de.joshavg.yaircclient.api.ResponseParser.Key.CHANNEL;
+import static de.joshavg.yaircclient.api.ResponseParser.Key.CMD;
+import static de.joshavg.yaircclient.api.ResponseParser.Key.META;
+import static de.joshavg.yaircclient.api.ResponseParser.Key.NICK;
+import static de.joshavg.yaircclient.api.ResponseParser.Key.RESPOND_TO;
+import static de.joshavg.yaircclient.api.ResponseParser.Key.SENDER;
+import static de.joshavg.yaircclient.api.ResponseParser.Key.TARGET;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import static de.joshavg.yaircclient.api.ResponseParser.Key.*;
 
 
 class PostProcessor {
