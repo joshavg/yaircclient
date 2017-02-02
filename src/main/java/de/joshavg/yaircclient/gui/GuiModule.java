@@ -7,6 +7,10 @@ import javax.inject.Singleton;
 @Module
 public class GuiModule {
 
+    private GuiModule() {
+        // di class
+    }
+
     @Provides
     @Singleton
     static OutputFactory provideOutputFactory() {

@@ -19,7 +19,7 @@ public class ResponseParser {
     }
 
     Map<Key, ResponseValue> parse() {
-        LOG.trace("parsing " + line);
+        LOG.trace("parsing '{}'", line);
 
         EnumMap<Key, ResponseValue> map = new EnumMap<>(Key.class);
         prepareMap(map);
@@ -35,7 +35,7 @@ public class ResponseParser {
             return map;
         }
 
-        LOG.trace("split parts: " + Arrays.toString(split));
+        LOG.trace("split parts: {}", (Object[]) split);
         if (split.length > 2) {
             String payload = workLine.substring(3 + split[1].length());
             map.put(Key.PAYLOAD, ResponseValue.of(payload));
@@ -45,8 +45,8 @@ public class ResponseParser {
         String[] headerSplit = header.split(" ");
         boolean isSingleHeader = false;
 
-        LOG.trace("header: " + header);
-        LOG.trace("header split: " + Arrays.toString(headerSplit));
+        LOG.trace("header: {}", header);
+        LOG.trace("header split: {}", (Object[]) headerSplit);
         Matcher userIdentMatcher = USER_IDENT.matcher(headerSplit[0]);
         if (userIdentMatcher.matches()) {
             map.put(Key.NICK, ResponseValue.of(userIdentMatcher.group(1)));
@@ -61,7 +61,7 @@ public class ResponseParser {
             }
         }
 
-        LOG.trace("is single header: " + isSingleHeader);
+        LOG.trace("is single header: {}", isSingleHeader);
         if (!isSingleHeader) {
             map.put(Key.CMD, ResponseValue.of(headerSplit[1]));
             if (headerSplit.length > 2) {

@@ -75,10 +75,10 @@ public class Client implements ApiListener {
     }
 
     private void handleServerResponse(String line) {
-        LOG.debug("incoming: " + line);
+        LOG.debug("incoming: {}", line);
         Map<ResponseParser.Key, ResponseParser.ResponseValue> parsed = new ResponseParser(line)
             .parse();
-        LOG.debug("parsed: " + parsed);
+        LOG.debug("parsed: {}", parsed);
 
         if ("376".equals(parsed.get(ResponseParser.Key.CMD).get())) {
             listeners.forEach(l -> l.connected(this));
@@ -92,7 +92,7 @@ public class Client implements ApiListener {
     }
 
     public void write(String line) {
-        LOG.debug("outgoing: " + line);
+        LOG.debug("outgoing: {}", line);
         if (writer == null) {
             throw new IllegalStateException("socket not yet writable");
         }

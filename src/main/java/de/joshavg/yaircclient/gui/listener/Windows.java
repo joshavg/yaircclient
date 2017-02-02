@@ -27,7 +27,7 @@ public class Windows implements GuiListener {
     }
 
     private boolean affectsMe(String text) {
-        return text.startsWith("/w ") || text.equals("/w");
+        return text.startsWith("/w ") || "/w".equals(text);
     }
 
     @Override
