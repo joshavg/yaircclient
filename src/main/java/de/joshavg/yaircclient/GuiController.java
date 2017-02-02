@@ -47,7 +47,7 @@ class GuiController {
 
     private void addApiListeners(Brabbel brabbel, Method[] methods) {
         Arrays.stream(methods)
-            .filter(m -> m.getReturnType() == ApiListener.class)
+            .filter(m -> ApiListener.class.isAssignableFrom(m.getReturnType()))
             .map(m -> {
                 try {
                     return (ApiListener) m.invoke(brabbel);
@@ -62,7 +62,7 @@ class GuiController {
 
     private void addGuiListeners(Brabbel brabbel, Method[] methods) {
         Arrays.stream(methods)
-            .filter(m -> m.getReturnType() == GuiListener.class)
+            .filter(m -> GuiListener.class.isAssignableFrom(m.getReturnType()))
             .map(m -> {
                 try {
                     return (GuiListener) m.invoke(brabbel);
