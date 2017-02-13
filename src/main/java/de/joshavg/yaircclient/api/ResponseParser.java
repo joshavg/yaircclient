@@ -99,7 +99,7 @@ public class ResponseParser {
 
         private final String value;
 
-        ResponseValue(String value) {
+        public ResponseValue(String value) {
             this.value = value;
         }
 
