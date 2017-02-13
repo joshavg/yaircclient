@@ -4,6 +4,7 @@ import de.joshavg.yaircclient.api.listener.UsersCollector;
 import de.joshavg.yaircclient.gui.GuiListener;
 import de.joshavg.yaircclient.gui.MainForm;
 import de.joshavg.yaircclient.gui.OutputTarget;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
@@ -38,9 +39,12 @@ public class NickAutocomplete implements GuiListener {
                 .map(u -> u.replaceFirst("[~&@%+]", ""))
                 .filter(u -> u.startsWith(search))
                 .collect(Collectors.toList());
+
             if (users.size() == 1) {
                 String user = users.get(0);
-                field.setText(user);
+                String firstPart = String
+                    .join(" ", Arrays.asList(parts).subList(0, parts.length - 1));
+                field.setText(firstPart + " " + user);
                 field.setCaretPosition(field.getText().length());
             }
         });
