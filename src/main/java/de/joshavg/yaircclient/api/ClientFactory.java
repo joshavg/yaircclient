@@ -19,9 +19,7 @@ public class ClientFactory {
     @Singleton
     @Inject
     UsersCollector provideUsersCollector(Client client) {
-        UsersCollector collector = new UsersCollector(client);
-        client.addListener(collector);
-        return collector;
+        return new UsersCollector(client);
     }
 
 }
