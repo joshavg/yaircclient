@@ -2,7 +2,8 @@ package de.joshavg.yaircclient.bridge;
 
 import de.joshavg.yaircclient.api.Client;
 import de.joshavg.yaircclient.api.Message;
-import de.joshavg.yaircclient.api.ResponseParser;
+import de.joshavg.yaircclient.api.ResponseParser.Key;
+import de.joshavg.yaircclient.api.ResponseParser.ResponseValue;
 import de.joshavg.yaircclient.api.listener.ApiListener;
 import de.joshavg.yaircclient.gui.ActionType;
 import de.joshavg.yaircclient.gui.GuiListener;
@@ -27,20 +28,21 @@ public class UsersDisplay implements ApiListener, GuiListener {
     }
 
     @Override
-    public void parsed(Map<ResponseParser.Key, ResponseParser.ResponseValue> parsed,
-        Client client) {
-        String cmd = parsed.get(ResponseParser.Key.CMD).get();
-        String[] meta = parsed.get(ResponseParser.Key.META).getValues();
+    public void parsed(Map<Key, ResponseValue> parsed, Client client) {
+        String cmd = parsed.get(Key.CMD).get();
+        String parsedChannel = parsed.get(Key.CHANNEL).get();
 
-        if (meta.length < 2 || !meta[1].equals(channel)) {
+        if ("366".equals(cmd)) {
+            channel = "";
+        }
+
+        if (!parsedChannel.equals(channel)) {
             return;
         }
 
         if ("353".equals(cmd)) {
             outputFactory.get(channel)
-                .writeln(parsed.get(ResponseParser.Key.PAYLOAD).get(), ActionType.NOTICE);
-        } else if ("366".equals(cmd)) {
-            channel = "";
+                .writeln(parsed.get(Key.PAYLOAD).get(), ActionType.NOTICE);
         }
     }
 
@@ -50,11 +52,6 @@ public class UsersDisplay implements ApiListener, GuiListener {
         boolean isChannel = target.getTarget().startsWith("#");
 
         if (!"/u?".equals(message) || !isChannel) {
-            return;
-        }
-
-        if (client == null) {
-            target.writeln("not connected", ActionType.ERROR);
             return;
         }
 

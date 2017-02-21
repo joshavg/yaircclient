@@ -34,11 +34,12 @@ public class NickAutocomplete implements GuiListener {
             String[] parts = text.split("\\s");
             String search = parts[parts.length - 1];
 
-            List<String> users = us.stream().filter(u -> u.startsWith(search))
+            List<String> users = us.stream()
+                .map(u -> u.replaceFirst("[~&@%+]", ""))
+                .filter(u -> u.startsWith(search))
                 .collect(Collectors.toList());
             if (users.size() == 1) {
                 String user = users.get(0);
-                user = user.replaceFirst("[~&@%\\+]", "");
                 field.setText(user);
                 field.setCaretPosition(field.getText().length());
             }
